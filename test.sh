@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/03 14:34:43 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/03 15:19:57 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,14 +64,8 @@ echo ---step5---
 assert 'ls /'
 assert 'echo hello	world	'
 assert 'nosuchfile\n\n'
-
-# echo "echo hoge" | ./minishell > minishell.txt
-# echo "echo hoge" | bash > bash.txt
-# diff minishell.txt bash.txt
-
-# echo -e "cd ..\n pwd" | ./minishell > minishell.txt
-# echo -e "cd ..\n pwd" | bash > bash.txt
-# diff minishell.txt bash.txt
+assert echo hello	'world	'
+assert 'nosuchfile' \n\n
 
 cleanup
 echo 'all OK'

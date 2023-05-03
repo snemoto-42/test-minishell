@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step5.tokenizer.c                                  :+:      :+:    :+:   */
+/*   step5-1.tokenizer.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 14:37:20 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 15:16:32 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,53 +22,6 @@ static t_token	*new_token(char *word, t_token_kind kind)
 	tok->word = word;
 	tok->kind = kind;
 	return (tok);
-}
-
-static bool	is_blank(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n');
-}
-
-static bool	consume_blank(char **rest, char *line)
-{
-	if (is_blank(*line))
-	{
-		while (*line && is_blank(*line))
-			line++;
-		*rest = line;
-		return (true);
-	}
-	*rest = line;
-	return (false);
-}
-
-static bool	startswith(const char *s, const char *keyword)
-{
-	return (memcmp(s, keyword, strlen(keyword)) == 0);
-}
-
-static bool	is_operator(const char *s)
-{
-	static char *const operators[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "\n"};
-	size_t		i = 0;
-
-	while (i < sizeof(operators) / sizeof(*operators))
-	{
-		if (startswith(s, operators[i]))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-static bool	is_metacharacter(char c)
-{
-	return (c && strchr("|&;()<> \t\n", c));
-}
-
-static bool is_word(const char *s)
-{
-	return (*s && !is_metacharacter(*s));
 }
 
 static t_token	*operator(char **rest, char *line)
@@ -99,7 +52,22 @@ static t_token	*word(char **rest, char *line)
 	char	*word;
 
 	while (*line && !is_metacharacter(*line))
+	{
 		line++;
+		if (*line == SINGLE_QUOTE_CHAR)
+		{
+			line++;
+			while (*line != SINGLE_QUOTE_CHAR)
+			{
+				if (*line == '\0')
+					todo("Unclosed single quote");
+				line++;
+			}
+			line++;
+		}
+		else
+			line++;
+	}
 	word = strndup(start, line - start);
 	if (word == NULL)
 		fatal_error("strndup");
@@ -127,26 +95,4 @@ t_token	*tokenize(char *line)
 	}
 	tok->next = new_token(NULL, TK_EOF);
 	return (head.next);
-}
-
-static char	**tail_recursive(t_token *tok, int nargs, char **argv)
-{
-	if (tok == NULL || tok->kind == TK_EOF)
-		return (argv);
-	argv = reallocf(argv, (nargs + 2) * sizeof(char *));
-	argv[nargs] = strdup(tok->word);
-	if (argv[nargs] == NULL)
-		fatal_error("strdup");
-	argv[nargs + 1] = NULL;
-	return (tail_recursive(tok->next, nargs + 1, argv));
-}
-
-char	**token_list_to_argv(t_token *tok)
-{
-	char	**argv;
-
-	argv = calloc(1, sizeof(char *));
-	if (argv == NULL)
-		fatal_error("calloc");
-	return (tail_recursive(tok, 0, argv));
 }

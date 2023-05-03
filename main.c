@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 14:43:48 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 15:07:49 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,8 @@ int	main(void)
 	}
 	exit(status);
 }
-
-#include <libc.h>
-__attribute__((destructor))
-static void destructor() {
-system("leaks -q minishell");
-}
+// #include <libc.h>
+// __attribute__((destructor))
+// static void destructor() {
+// system("leaks -q minishell");
+// }
