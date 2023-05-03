@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/04/30 13:46:32 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/03 14:34:43 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,11 @@ assert 'ls'
 assert './a.out'
 assert 'a.out'
 assert 'nosuchfile'
+
+echo ---step5---
+assert 'ls /'
+assert 'echo hello	world	'
+assert 'nosuchfile\n\n'
 
 # echo "echo hoge" | ./minishell > minishell.txt
 # echo "echo hoge" | bash > bash.txt

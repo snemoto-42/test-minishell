@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 13:46:40 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 14:43:48 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,25 @@
 int	main(void)
 {
 	char	*line;
-	t_token	*tok;
+	int		status;
+
 	rl_outstream = stderr;
+	status = 0;
 	while (1)
 	{
 		line = readline("minishell$> ");
 		if (line == NULL)
 			break ;
 		if (*line)
-		{
 			add_history(line);
-			// // step2
-			// interpret(line);
-			// // step3
-			// line = search_path(line);
-			// interpret(line);
-			// printf("line:%s\n", line);
-			tok = tokenize(line);
-			while (tok->kind != TK_EOF)
-			{
-			printf("word:%s\n", tok->word);
-				tok = tok->next;
-			}
-			line = search_path(line);
-			interpret(line);
-		}
+		interpret(line, &status);
 		free(line);
 	}
-	exit(EXIT_SUCCESS);
+	exit(status);
 }
 
-// #include <libc.h>
-// __attribute__((destructor))
-// static void destructor() {
-// system("leaks -q minishell");
-// }
+#include <libc.h>
+__attribute__((destructor))
+static void destructor() {
+system("leaks -q minishell");
+}

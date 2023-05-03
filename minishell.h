@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 13:53:21 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 14:33:10 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,8 @@
 # include <string.h>
 # include <stdbool.h>
 
-void	fatal_error(const char *msg) __attribute__((noreturn));
-void	assert_error(const char *msg) __attribute__((noreturn));
-void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
-void	todo(const char *msg) __attribute__((noreturn));
-
 // step3
-int		interpret(char *line);
+void	interpret(char *line, int *stat_loc);
 
 // step4
 char	*search_path(const char *filename);
@@ -52,5 +47,14 @@ struct s_token
 };
 
 t_token	*tokenize(char *line);
+char	**token_list_to_argv(t_token *tok);
+
+void	fatal_error(const char *msg) __attribute__((noreturn));
+void	assert_error(const char *msg) __attribute__((noreturn));
+void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
+void	todo(const char *msg) __attribute__((noreturn));
+
+void	free_tok(t_token *tok);
+void	free_argv(char **argv);
 
 #endif
