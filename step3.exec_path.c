@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:58:06 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 20:18:18 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	exec(char **argv)
 void	interpret(char *line, int *stat_loc)
 {
 	t_token	*tok;
+	t_node	*node;
 	char 	**argv;
 
 	tok = tokenize(line);
@@ -57,10 +58,12 @@ void	interpret(char *line, int *stat_loc)
 		*stat_loc = ERROR_TOKENIZE;
 	else
 	{
-		expand(tok);
-		argv = token_list_to_argv(tok);
+		node = parse(tok);
+		expand(node);
+		argv = token_list_to_argv(node->args);
 		*stat_loc = exec(argv);
 		free_argv(argv);
+		free_node(node);
 	}
 	free_tok(tok);
 }

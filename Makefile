@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/03 15:44:45 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/03 20:24:04 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ MINISHELL_SRCS = \
 					step5-0.bool.c \
 					step5-1.tokenize.c \
 					step5-2.token_to_argv.c \
-					step5-3.expand.c
+					step5-3.expand.c \
+					step7.parse.c
 
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror

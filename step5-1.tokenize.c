@@ -6,13 +6,13 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 16:02:54 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 19:43:05 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token	*new_token(char *word, t_token_kind kind)
+t_token	*new_token(char *word, t_token_kind kind)
 {
 	t_token	*tok;
 
