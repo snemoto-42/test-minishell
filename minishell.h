@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:31:25 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 15:59:39 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define SINGLE_QUOTE_CHAR '\''
 # define DOUBLE_QUOTE_CHAR '"'
+# define ERROR_TOKENIZE 258
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -24,6 +25,9 @@
 # include <limits.h>
 # include <string.h>
 # include <stdbool.h>
+
+// global var
+extern bool	syntax_error;
 
 // step3
 void	interpret(char *line, int *stat_loc);
@@ -67,6 +71,7 @@ void	fatal_error(const char *msg) __attribute__((noreturn));
 void	assert_error(const char *msg) __attribute__((noreturn));
 void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
 void	todo(const char *msg) __attribute__((noreturn));
+void	tokenize_error(const char *location, char **rest, char *line);
 
 void	free_tok(t_token *tok);
 void	free_argv(char **argv);

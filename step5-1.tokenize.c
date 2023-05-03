@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:47:10 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 16:02:54 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,23 +57,27 @@ static t_token	*word(char **rest, char *line)
 		{
 			line++;
 			while (*line != SINGLE_QUOTE_CHAR)
-			{
-				if (*line == '\0')
-					todo("Unclosed single quote");
 				line++;
+			if (*line == '\0')
+			{
+				tokenize_error("Unclosed single quote", &line, line);
+				break ;
 			}
-			line++;
+			else
+				line++;
 		}
 		else if (*line == DOUBLE_QUOTE_CHAR)
 		{
 			line++;
 			while (*line != DOUBLE_QUOTE_CHAR)
-			{
-				if (*line == '\0')
-					todo("Unclosed double quote");
 				line++;
+			if (*line == '\0')
+			{
+				tokenize_error("Unclosed double quote", &line , line);
+				break ;
 			}
-			line++;
+			else
+				line++;
 		}
 		else
 			line++;
@@ -90,6 +94,7 @@ t_token	*tokenize(char *line)
 	t_token	head;
 	t_token	*tok;
 
+	syntax_error = false;
 	head.next = NULL;
 	tok = &head;
 	while (*line)
@@ -101,7 +106,7 @@ t_token	*tokenize(char *line)
 		else if (is_word(line))
 			tok = tok->next = word(&line, line);
 		else
-			assert_error("Unexpected Token");
+			tokenize_error("Unexpected Token", &line, line);
 	}
 	tok->next = new_token(NULL, TK_EOF);
 	return (head.next);
