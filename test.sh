@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/03 15:19:57 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/03 15:51:20 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,15 +17,24 @@ cat <<EOF | gcc -xc -o a.out -
 int main() { printf("hello from a.out\n"); }
 EOF
 
+cat <<EOF | gcc -xc -o print_args -
+#include <stdio.h>
+int main(int argc, char **argv) {
+	for (int i = 0; argv[i]; i++)
+		printf("argv[%d] = %s\n", i, argv[i]);
+}
+EOF
+
 cleanup() {
 	rm -f cmp out
 	rm -f bash.txt minishell.txt
 	rm -f a.out
+	rm -f print_args
 	make fclean
 }
 
 assert() {
-	printf '%-30s:' "\"$1\""
+	printf '%-50s:' "[$1]"
 	
 	echo -n -e "$1" | bash >cmp 2>&-
 	expected=$?
@@ -33,7 +42,7 @@ assert() {
 	echo -n -e "$1" | ./minishell >out 2>&-
 	actual=$?
 
-	diff cmp out >/dev/null && echo -n '	diff OK' || echo -n '	diff NG'
+	diff cmp out >/dev/null && echo -n 'diff OK' || echo -n 'diff NG'
 	
 	if [ "$actual" = "$expected" ]; then
 		echo -n '	status OK'
@@ -51,6 +60,7 @@ assert ''
 echo ---step3---
 assert '/bin/pwd'
 assert '/bin/echo'
+assert '/bin/ls'
 
 echo ---step4---
 assert 'pwd'
@@ -64,8 +74,14 @@ echo ---step5---
 assert 'ls /'
 assert 'echo hello	world	'
 assert 'nosuchfile\n\n'
-assert echo hello	'world	'
-assert 'nosuchfile' \n\n
+assert "./print_args 'hello	world' '42tokyo'"
+assert "echo 'hello	world' '42tokyo'"
+assert "echo '\"hello	world\"' '42tokyo'"
+assert './print_args "hello	world" "42tokyo"'
+assert 'echo "hello	world" "42tokyo"'
+assert "echo \"'hello	world'\" \"42tokyo\""
+assert "echo hello'	world'"
+assert "echo hello'	world	'\"	42tokyo	\""
 
 cleanup
 echo 'all OK'

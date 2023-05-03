@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/03 15:17:19 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/03 15:44:45 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ MINISHELL_SRCS = \
 					step3.exec_path.c \
 					step4.exec_filename.c \
 					step5-0.bool.c \
-					step5-1.tokenizer.c \
+					step5-1.tokenize.c \
 					step5-2.token_to_argv.c \
 					step5-3.expand.c
 

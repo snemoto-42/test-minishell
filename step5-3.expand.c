@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step5-2.expand.c                                   :+:      :+:    :+:   */
+/*   step5-3.expand.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:56:31 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:04:18 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 15:49:43 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,18 @@ static void	quote_removal(t_token *tok)
 			while (*p != SINGLE_QUOTE_CHAR)
 			{
 				if (*p == '\0')
-					todo("Unclosed single quote");
+					assert_error("Unclosed single quote");
+				append_char(&new_word, *p++);
+			}
+			p++;
+		}
+		else if (*p == DOUBLE_QUOTE_CHAR)
+		{
+			p++;
+			while (*p != DOUBLE_QUOTE_CHAR)
+			{
+				if (*p == '\0')
+					assert_error("Unclosed single quote");
 				append_char(&new_word, *p++);
 			}
 			p++;

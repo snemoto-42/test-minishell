@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step5-1.tokenizer.c                                :+:      :+:    :+:   */
+/*   step5-1.tokenize.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:16:32 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 15:47:10 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static t_token	*word(char **rest, char *line)
 
 	while (*line && !is_metacharacter(*line))
 	{
-		line++;
 		if (*line == SINGLE_QUOTE_CHAR)
 		{
 			line++;
@@ -61,6 +60,17 @@ static t_token	*word(char **rest, char *line)
 			{
 				if (*line == '\0')
 					todo("Unclosed single quote");
+				line++;
+			}
+			line++;
+		}
+		else if (*line == DOUBLE_QUOTE_CHAR)
+		{
+			line++;
+			while (*line != DOUBLE_QUOTE_CHAR)
+			{
+				if (*line == '\0')
+					todo("Unclosed double quote");
 				line++;
 			}
 			line++;

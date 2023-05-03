@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:17:30 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 15:31:25 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # define SINGLE_QUOTE_CHAR '\''
+# define DOUBLE_QUOTE_CHAR '"'
 
 # include <stdlib.h>
 # include <unistd.h>
