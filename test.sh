@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/03 15:51:20 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/03 16:11:24 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ cleanup() {
 }
 
 assert() {
-	printf '%-50s:' "[$1]"
+	printf '%-40s:' "[$1]"
 	
 	echo -n -e "$1" | bash >cmp 2>&-
 	expected=$?
@@ -42,7 +42,7 @@ assert() {
 	echo -n -e "$1" | ./minishell >out 2>&-
 	actual=$?
 
-	diff cmp out >/dev/null && echo -n 'diff OK' || echo -n 'diff NG'
+	diff cmp out >/dev/null && echo -n '	diff OK' || echo -n '	diff NG'
 	
 	if [ "$actual" = "$expected" ]; then
 		echo -n '	status OK'

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:10:02 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 19:24:03 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	**tail_recursive(t_token *tok, int nargs, char **argv)
 {
 	if (tok == NULL || tok->kind == TK_EOF)
 		return (argv);
-	argv = reallocf(argv, (nargs + 2) * sizeof(char *));
+	argv = reallocf(argv, sizeof(char *) * (nargs + 2));
 	argv[nargs] = strdup(tok->word);
 	if (argv[nargs] == NULL)
 		fatal_error("strdup");
