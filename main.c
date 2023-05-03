@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/04/30 13:42:54 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 13:46:40 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	main(void)
 {
 	char	*line;
-	// rl_outstream = stderr;
+	t_token	*tok;
+	rl_outstream = stderr;
 	while (1)
 	{
 		line = readline("minishell$> ");
@@ -26,7 +27,18 @@ int	main(void)
 			add_history(line);
 			// // step2
 			// interpret(line);
-			interpret(search_path(line));
+			// // step3
+			// line = search_path(line);
+			// interpret(line);
+			// printf("line:%s\n", line);
+			tok = tokenize(line);
+			while (tok->kind != TK_EOF)
+			{
+			printf("word:%s\n", tok->word);
+				tok = tok->next;
+			}
+			line = search_path(line);
+			interpret(line);
 		}
 		free(line);
 	}

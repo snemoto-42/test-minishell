@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step3.exec_path.c                                  :+:      :+:    :+:   */
+/*   destructor.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 13:42:04 by snemoto          ###   ########.fr       */
+/*   Created: 2023/05/03 13:43:37 by snemoto           #+#    #+#             */
+/*   Updated: 2023/05/03 13:46:14 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+# include "minishell.h"
 
-int		interpret(char *line)
+void	free_tok(t_token *tok)
 {
-	extern char **environ;
-	char		*argv[] = {line, NULL};
-	pid_t		pid;
-	int			wstatus;
+	if (tok == NULL)
+		return ;
+	if (tok->word)
+		free(tok->word);
+	free_tok(tok->next);
+	free(tok);
+}
 
-	pid = fork();
-	if (pid < 0)
-		fatal_error("fork");
-	else if (pid == 0)
+void	free_argv(char **argv)
+{
+	size_t	i = 0;
+
+	if (argv == NULL)
+		return ;
+	while (argv[i])
 	{
-		execve(line, argv, environ);
-		fatal_error("execve");
+		free(argv[i]);
+		i++;
 	}
-	else
-	{
-		wait(&wstatus);
-		return (WEXITSTATUS(wstatus));
-	}
+	free(argv);
 }

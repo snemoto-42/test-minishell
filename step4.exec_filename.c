@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:20:50 by snemoto           #+#    #+#             */
-/*   Updated: 2023/04/30 13:33:14 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/03 13:22:30 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ char	*search_path(const char *filename)
 	char	path[PATH_MAX];
 	char	*value;
 	char	*end;
+	char	*dup;
 
 	value = getenv("PATH");
 	while (*value)
@@ -30,9 +31,7 @@ char	*search_path(const char *filename)
 		strlcat(path, "/", PATH_MAX);
 		strlcat(path, filename, PATH_MAX);
 		if (access(path, X_OK) == 0)
-		{
-			char	*dup;
-			
+		{	
 			dup = strdup(path);
 			if (dup == NULL)
 				fatal_error("strdup");

@@ -6,14 +6,17 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/04/30 13:34:43 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/03 13:51:39 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MINISHELL_SRCS = \
 					main.c \
+					destructor.c \
+					error.c \
 					step3.exec_path.c \
-					step4.exec_filename.c
+					step4.exec_filename.c \
+					step5.tokenizer.c
 
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
