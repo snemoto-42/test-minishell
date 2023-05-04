@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 13:25:46 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 13:46:15 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,10 +99,19 @@ assert "echo \"'hello	world'\" \"42tokyo\""
 assert "echo hello'	world'"
 assert "echo hello'	world	'\"	42tokyo	\""
 
-echo ---step9---
+echo ---step9-1---
 assert 'echo hello >hello.txt' 'hello.txt'
 assert 'echo hello >f1>f2>f3' 'f1' 'f2' 'f3'
 
-echo ---finishe---
+echo ---step9-2---
+assert 'cat <Makefile'
+echo hello >f1
+echo world >f2
+echo 42tokyo >f3
+assert 'cat <f1<f2<f3'
+rm -f f1 f2 f3
+assert 'cat <hoge'
+
+echo ---finish---
 
 cleanup

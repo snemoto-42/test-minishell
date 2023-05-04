@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 13:11:44 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 13:38:10 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ static int	exec(t_node *node)
 {
 	int	status;
 
-	open_redir_file(node->redirects);
+	if (open_redir_file(node->redirects) < 0)
+		return (ERRPR_OPEN_REDIR);
 	do_redirect(node->redirects);
 	status = exec_cmd(node);
 	reset_redirect(node->redirects);

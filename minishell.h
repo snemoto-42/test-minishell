@@ -6,17 +6,18 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 13:09:06 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 13:43:20 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define SINGLE_QUOTE_CHAR '\''
-# define DOUBLE_QUOTE_CHAR '"'
 # define ERROR_TOKENIZE 258
 # define ERROR_PARSE 258
+# define ERRPR_OPEN_REDIR 1
+# define SINGLE_QUOTE_CHAR '\''
+# define DOUBLE_QUOTE_CHAR '"'
 # define ERROR_PREFIX "minishell: "
 
 # include <stdlib.h>
@@ -73,6 +74,7 @@ typedef enum e_node_kind
 {
 	ND_SIMPLE_CMD,
 	ND_REDIR_OUT,
+	ND_REDIR_IN,
 }	t_node_kind;
 
 typedef struct	s_node t_node;
@@ -96,7 +98,7 @@ bool	at_eof(t_token *tok);
 void	expand(t_node *node);
 
 // step9
-void	open_redir_file(t_node *redir);
+int		open_redir_file(t_node *redir);
 void	do_redirect(t_node *redir);
 void	reset_redirect(t_node *redir);
 
@@ -107,6 +109,7 @@ void	err_exit(const char *location, const char *msg, int status) __attribute__((
 void	todo(const char *msg) __attribute__((noreturn));
 void	tokenize_error(const char *location, char **rest, char *line);
 void	parse_error(const char *location, t_token **rest, t_token *tok);
+void	xperror(const char *location);
 
 void	free_node(t_node *node);
 void	free_tok(t_token *tok);
