@@ -6,13 +6,13 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:56:31 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 15:14:45 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:13:54 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	append_char(char **s, char c)
+void	append_char(char **s, char c)
 {
 	size_t	size;
 	char	*new;
@@ -76,7 +76,9 @@ static void	remove_quote(t_token *tok)
 	if (tok == NULL || tok->kind != TK_WORD || tok->word == NULL)
 		return ;
 	p = tok->word;
-	new_word = NULL;
+	new_word = calloc(1, sizeof(char));
+	if (new_word == NULL)
+		fatal_error("calloc");
 	while (*p && !is_metacharacter(*p))
 	{
 		if (*p == SINGLE_QUOTE_CHAR)
@@ -105,5 +107,6 @@ static void	expand_quote_removal(t_node *node)
 
 void	expand(t_node *node)
 {
+	expand_variable(node);
 	expand_quote_removal(node);
 }

@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 15:39:40 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 16:16:27 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -125,6 +125,11 @@ assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT'
 echo ---step10---
 assert 'cat Makefile | grep minishell'
 assert 'cat | cat | ls\n\n'
+
+echo ---step11-1---
+assert 'echo $USER'
+assert 'echo $USER$PATH$TERM'
+assert 'echo "$USER	$PATH	$TERM"'
 
 echo ---finish---
 

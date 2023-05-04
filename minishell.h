@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 15:42:26 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:13:44 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
+# include <ctype.h>
 
 extern bool	syntax_error;
 
@@ -111,7 +112,10 @@ char	**token_list_to_argv(t_token *tok);
 t_node	*parse(t_token *tok);
 bool	at_eof(t_token *tok);
 
+void	append_char(char **s, char c);
 void	expand(t_node *node);
+
+void	expand_variable(t_node *node);
 
 int		open_redir_file(t_node *redir);
 void	do_redirect(t_node *redir);
