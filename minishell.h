@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 15:00:26 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 15:42:26 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <string.h>
 # include <stdbool.h>
 # include <fcntl.h>
+# include <errno.h>
+# include <sys/wait.h>
 
 extern bool	syntax_error;
 
@@ -51,6 +53,7 @@ struct s_token
 
 typedef enum e_node_kind
 {
+	ND_PIPELINE,
 	ND_SIMPLE_CMD,
 	ND_REDIR_OUT,
 	ND_REDIR_IN,
@@ -71,7 +74,22 @@ struct s_node
 	t_token		*delimiter;
 	int			filefd;
 	int			stashed_targetfd;
+	int			inpipe[2];
+	int			outpipe[2];
+	t_node		*command;
 };
+
+void	fatal_error(const char *msg) __attribute__((noreturn));
+void	assert_error(const char *msg) __attribute__((noreturn));
+void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
+void	todo(const char *msg) __attribute__((noreturn));
+void	tokenize_error(const char *location, char **rest, char *line);
+void	parse_error(const char *location, t_token **rest, t_token *tok);
+void	xperror(const char *location);
+
+void	free_node(t_node *node);
+void	free_tok(t_token *tok);
+void	free_argv(char **argv);
 
 void	interpret(char *line, int *stat_loc);
 
@@ -80,7 +98,7 @@ char	*search_path(const char *filename);
 bool	consume_blank(char **rest, char *line);
 bool	startswith(const char *s, const char *keyword);
 bool	is_metacharacter(char c);
-bool	is_control_operator(const char *s);
+bool	is_control_operator(t_token *tok);
 bool 	is_word(const char *s);
 bool	is_redirection_operator(const char *s);
 
@@ -107,16 +125,8 @@ t_node	*redirect_heredoc(t_token **rest, t_token *tok);
 
 t_node	*new_node(t_node_kind kind);
 
-void	fatal_error(const char *msg) __attribute__((noreturn));
-void	assert_error(const char *msg) __attribute__((noreturn));
-void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
-void	todo(const char *msg) __attribute__((noreturn));
-void	tokenize_error(const char *location, char **rest, char *line);
-void	parse_error(const char *location, t_token **rest, t_token *tok);
-void	xperror(const char *location);
-
-void	free_node(t_node *node);
-void	free_tok(t_token *tok);
-void	free_argv(char **argv);
+void	prepare_pipe(t_node *node);
+void	prepare_pipe_child(t_node *node);
+void	prepare_pipe_parent(t_node *node);
 
 #endif

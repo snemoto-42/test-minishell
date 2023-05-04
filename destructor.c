@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 13:43:37 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 14:29:16 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 15:14:26 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	free_node(t_node *node)
 	free_tok(node->delimiter);
 	free_node(node->redirects);
 	free_node(node->next);
+	free_node(node->command);
 	free(node);
 }
 
