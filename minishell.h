@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:18:58 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:41:49 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 extern int						g_last_status;
 extern bool						g_syntax_error;
-extern bool 					g_readline_interrupted;
+extern bool						g_readline_interrupted;
 extern volatile sig_atomic_t	g_sig;
 
 typedef enum e_token_kind
@@ -47,8 +47,7 @@ typedef enum e_token_kind
 	TK_EOF,
 }	t_token_kind;
 
-typedef struct s_token t_token;
-
+typedef struct s_token	t_token;
 struct s_token
 {
 	char			*word;
@@ -66,8 +65,7 @@ typedef enum e_node_kind
 	ND_REDIR_HEREDOC,
 }	t_node_kind;
 
-typedef struct	s_node t_node;
-
+typedef struct s_node	t_node;
 struct s_node
 {
 	t_node_kind	kind;
@@ -105,7 +103,7 @@ bool	consume_blank(char **rest, char *line);
 bool	startswith(const char *s, const char *keyword);
 bool	is_metacharacter(char c);
 bool	is_control_operator(t_token *tok);
-bool 	is_word(const char *s);
+bool	is_word(const char *s);
 bool	is_redirection_operator(const char *s);
 
 t_token	*new_token(char *word, t_token_kind kind);

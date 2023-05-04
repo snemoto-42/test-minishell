@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:21:53 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:34:42 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	read_heredoc(const char *delimiter, bool is_delim_unquoted)
 	return (pfd[0]);
 }
 
-int		open_redir_file(t_node *node)
+int	open_redir_file(t_node *node)
 {
 	if (node == NULL)
 		return (0);
@@ -118,11 +118,11 @@ void	do_redirect(t_node *redir)
 	if (is_redirect(redir))
 	{
 		redir->stashed_targetfd = stashfd(redir->targetfd);
-		dup2(redir->filefd, redir->targetfd);		
+		dup2(redir->filefd, redir->targetfd);
 	}
 	else
 		assert_error("do_redirect");
-	do_redirect(redir->next);	
+	do_redirect(redir->next);
 }
 
 void	reset_redirect(t_node *redir)
@@ -134,7 +134,7 @@ void	reset_redirect(t_node *redir)
 	{
 		close(redir->filefd);
 		close(redir->targetfd);
-		dup2(redir->stashed_targetfd, redir->targetfd);	
+		dup2(redir->stashed_targetfd, redir->targetfd);
 	}
 	else
 		assert_error("reset_redirect");

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:55:39 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:22:24 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:40:08 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ static void	handler(int signum)
 
 static void	reset_sig(int signum)
 {
-	struct  sigaction	sa;
+	struct sigaction	sa;
 
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sa.sa_handler = SIG_DFL;
 	if (sigaction(signum, &sa, NULL) < 0)
-		fatal_error("sigaction");	
+		fatal_error("sigaction");
 }
 
 static void	ignore_sig(int signum)
 {
 	struct sigaction	sa;
-	
+
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sa.sa_handler = SIG_IGN;

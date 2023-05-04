@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:19:56 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:37:48 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ t_token	*tokdup(t_token *tok)
 
 static t_token	*operator(char **rest, char *line)
 {
-	static char *const operators[] = {">>", "<<", "||", "&&", ";;", "<", ">", "&", ";", "(", ")", "|", "\n"};
-	size_t		i = 0;
-	char		*op;
+	static char *const	operators[] = {">>", "<<", "||", "&&", ";;", "<", ">", "&", ";", "(", ")", "|", "\n"};
+	size_t				i;
+	char				*op;
 
+	i = 0;
 	while (i < sizeof(operators) / sizeof(*operators))
 	{
 		if (startswith(line, operators[i]))
@@ -58,8 +59,8 @@ static t_token	*operator(char **rest, char *line)
 
 static t_token	*word(char **rest, char *line)
 {
-	const char *start = line;
-	char	*word;
+	const char	*start = line;
+	char		*word;
 
 	while (*line && !is_metacharacter(*line))
 	{
@@ -83,7 +84,7 @@ static t_token	*word(char **rest, char *line)
 				line++;
 			if (*line == '\0')
 			{
-				tokenize_error("Unclosed double quote", &line , line);
+				tokenize_error("Unclosed double quote", &line, line);
 				break ;
 			}
 			else

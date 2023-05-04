@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:56:31 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:43:14 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:35:33 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	remove_single_quote(char **dst, char **rest, char *p)
 		assert_error("Expected single quote");
 }
 
-static void remove_double_quote(char **dst, char **rest, char *p)
+static void	remove_double_quote(char **dst, char **rest, char *p)
 {
 	if (*p == DOUBLE_QUOTE_CHAR)
 	{

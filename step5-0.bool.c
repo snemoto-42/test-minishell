@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 15:36:22 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:39:12 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,10 @@ bool	startswith(const char *s, const char *keyword)
 
 bool	is_control_operator(t_token *tok)
 {
-	static char *const operators[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "\n"};
-	size_t		i = 0;
+	static char *const	operators[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "\n"};
+	size_t				i;
 
+	i = 0;
 	while (i < sizeof(operators) / sizeof(*operators))
 	{
 		if (startswith(tok->word, operators[i]))
@@ -63,9 +64,10 @@ bool	is_control_operator(t_token *tok)
 
 bool	is_redirection_operator(const char *s)
 {
-	static char *const operators[] = {">", "<", ">>", "<<"};
-	size_t		i = 0;
+	static char *const	operators[] = {">", "<", ">>", "<<"};
+	size_t				i;
 
+	i = 0;
 	while (i < sizeof(operators) / sizeof(*operators))
 	{
 		if (startswith(s, operators[i]))
