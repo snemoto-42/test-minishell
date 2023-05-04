@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 13:11:07 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 14:05:28 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,16 @@ t_token	*new_token(char *word, t_token_kind kind)
 	tok->word = word;
 	tok->kind = kind;
 	return (tok);
+}
+
+t_token	*tokdup(t_token *tok)
+{
+	char	*word;
+
+	word = strdup(tok->word);
+	if (word == NULL)
+		fatal_error("strdup");
+	return (new_token(word, tok->kind));
 }
 
 static t_token	*operator(char **rest, char *line)

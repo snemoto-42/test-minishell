@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 13:46:15 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 13:59:56 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,6 +111,10 @@ echo 42tokyo >f3
 assert 'cat <f1<f2<f3'
 rm -f f1 f2 f3
 assert 'cat <hoge'
+
+echo ---step9-3---
+assert 'pwd >>pwd.txt' 'pwd.txt'
+assert 'pwd >>pwd.txt \n pwd >> pwd.txt' 'pwd.txt'
 
 echo ---finish---
 

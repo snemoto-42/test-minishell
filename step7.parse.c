@@ -6,37 +6,11 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 13:46:34 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 14:09:16 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
-
-bool	at_eof(t_token *tok)
-{
-	return (tok->kind == TK_EOF);
-}
-
-static t_node	*new_node(t_node_kind kind)
-{
-	t_node	*node;
-
-	node = calloc(1, sizeof(*node));
-	if (node == NULL)
-		fatal_error("calloc");
-	node->kind = kind;
-	return (node);
-}
-
-static t_token	*tokdup(t_token *tok)
-{
-	char	*word;
-
-	word = strdup(tok->word);
-	if (word == NULL)
-		fatal_error("strdup");
-	return (new_token(word, tok->kind));
-}
 
 static void	append_tok(t_token **tok, t_token *elm)
 {
@@ -58,32 +32,19 @@ static void	append_node(t_node **node, t_node *elm)
 	append_node(&(*node)->next, elm);
 }
 
-static bool	equal_op(t_token *tok, char *op)
+bool	at_eof(t_token *tok)
 {
-	if (tok->kind != TK_OP)
-		return (false);
-	return (strcmp(tok->word, op) == 0);
+	return (tok->kind == TK_EOF);
 }
 
-static t_node	*redirect_out(t_token **rest, t_token *tok)
+t_node	*new_node(t_node_kind kind)
 {
 	t_node	*node;
 
-	node = new_node(ND_REDIR_OUT);
-	node->filename = tokdup(tok->next);
-	node->targetfd = STDOUT_FILENO;
-	*rest = tok->next->next;
-	return (node);
-}
-
-static t_node	*redirect_in(t_token **rest, t_token *tok)
-{
-	t_node	*node;
-
-	node = new_node(ND_REDIR_IN);
-	node->filename = tokdup(tok->next);
-	node->targetfd = STDIN_FILENO;
-	*rest = tok->next->next;
+	node = calloc(1, sizeof(*node));
+	if (node == NULL)
+		fatal_error("calloc");
+	node->kind = kind;
 	return (node);
 }
 
@@ -98,6 +59,8 @@ static void	append_command_element(t_node *command, t_token **rest, t_token *tok
 		append_node(&command->redirects, redirect_out(&tok, tok));
 	else if (equal_op(tok, "<") && tok->next->kind == TK_WORD)
 		append_node(&command->redirects, redirect_in(&tok, tok));
+	else if (equal_op(tok, ">>") && tok->next->next == TK_WORD)
+		append_node(&command->redirects, redirect_append(&tok, tok));
 	else
 		todo("append_command_element");
 	*rest = tok;

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 13:43:20 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 14:10:04 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ bool 	is_word(const char *s);
 bool	is_redirection_operator(const char *s);
 
 t_token	*new_token(char *word, t_token_kind kind);
+t_token	*tokdup(t_token *tok);
 t_token	*tokenize(char *line);
 
 char	**token_list_to_argv(t_token *tok);
@@ -75,6 +76,7 @@ typedef enum e_node_kind
 	ND_SIMPLE_CMD,
 	ND_REDIR_OUT,
 	ND_REDIR_IN,
+	ND_REDIR_APPEND,
 }	t_node_kind;
 
 typedef struct	s_node t_node;
@@ -101,6 +103,13 @@ void	expand(t_node *node);
 int		open_redir_file(t_node *redir);
 void	do_redirect(t_node *redir);
 void	reset_redirect(t_node *redir);
+
+bool	equal_op(t_token *tok, char *op);
+t_node	*redirect_out(t_token **rest, t_token *tok);
+t_node	*redirect_in(t_token **rest, t_token *tok);
+t_node	*redirect_append(t_token **rest, t_token *tok);
+
+t_node	*new_node(t_node_kind kind);
 
 // others
 void	fatal_error(const char *msg) __attribute__((noreturn));
