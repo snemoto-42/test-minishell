@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:00:24 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 20:23:57 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ void	reset_signal(void);
 
 bool	startswith(const char *s, const char *keyword);
 bool	is_control_operator(t_token *tok);
-bool	is_redirection_operator(const char *s);
 
 bool	consume_blank(char **rest, char *line);
 bool	is_metacharacter(char c);

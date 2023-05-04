@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:04:00 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 20:32:56 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,15 @@ t_token	*tokenize(char *line)
 		if (consume_blank(&line, line))
 			continue ;
 		else if (is_metacharacter(*line))
-			tok = tok->next = operator(&line, line);
+		{
+			tok->next = operator(&line, line);
+			tok = tok->next;
+		}
 		else if (is_word(line))
-			tok = tok->next = word(&line, line);
+		{
+			tok->next = word(&line, line);
+			tok = tok->next;
+		}
 		else
 			tokenize_error("Unexpected Token", &line, line);
 	}

@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 19:43:12 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 20:39:53 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,6 @@ MINISHELL_SRCS = \
 					redirect.c \
 					signal_util.c \
 					signal.c \
-					tokenize_is_op.c \
 					tokenize_is.c \
 					tokenize_to_argv.c \
 					tokenize_word.c \
@@ -36,11 +35,8 @@ MINISHELL_SRCS = \
 
 NAME	= minishell
 CC		= cc
-RLDIR	= $(shell brew --prefix readline)
-INCLUDE	= -I include -I$(RLDIR)/include
 CFLAGS	= -Wall -Wextra -Werror $(INCLUDE)
-# CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
-LIBS	= -lreadline -L$(RLDIR)/lib
+LIBS	= -lreadline
 RM		= rm -f
 SRCS	= ${MINISHELL_SRCS}
 OBJS	= ${MINISHELL_SRCS:.c=.o}

@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 18:45:45 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 20:47:00 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,15 +86,12 @@ assert() {
 
 make all
 
-echo ---step2---
 assert ''
 
-echo ---step3---
 assert '/bin/pwd'
 assert '/bin/echo'
 assert '/bin/ls'
 
-echo ---step4---
 assert 'pwd'
 assert 'echo'
 assert 'ls'
@@ -102,24 +99,21 @@ assert './a.out'
 assert 'a.out'
 assert 'nosuchfile'
 
-echo ---step5---
 assert 'ls /'
-assert 'echo hello	world	'
+assert 'echo hello     world     '
 assert 'nosuchfile\n\n'
-assert "./print_args 'hello	world' '42tokyo'"
-assert "echo 'hello	world' '42tokyo'"
-assert "echo '\"hello	world\"' '42tokyo'"
-assert './print_args "hello	world" "42tokyo"'
-assert 'echo "hello	world" "42tokyo"'
-assert "echo \"'hello	world'\" \"42tokyo\""
-assert "echo hello'	world'"
-assert "echo hello'	world	'\"	42tokyo	\""
+assert "./print_args 'hello   world'    '42tokyo'"
+assert "echo 'hello   world' '42tokyo'"
+assert "echo '\"hello     world\"' '42tokyo'"
+assert './print_args "hello    world" "42tokyo"'
+assert 'echo "hello   world" "42tokyo"'
+assert "echo \"'hello    world'\" \"42tokyo\""
+assert "echo hello'   world'"
+assert "echo hello'   world  '\"  42tokyo   \""
 
-echo ---step9-1---
 assert 'echo hello >hello.txt' 'hello.txt'
 assert 'echo hello >f1>f2>f3' 'f1' 'f2' 'f3'
 
-echo ---step9-2---
 assert 'cat <Makefile'
 echo hello >f1
 echo world >f2
@@ -128,40 +122,32 @@ assert 'cat <f1<f2<f3'
 rm -f f1 f2 f3
 assert 'cat <hoge'
 
-echo ---step9-3---
 assert 'pwd >>pwd.txt' 'pwd.txt'
 assert 'pwd >>pwd.txt \n pwd >> pwd.txt' 'pwd.txt'
 
-echo ---step9-4---
 assert 'cat <<EOF\nhello\nworld\nEOF\nNOPRINT'
 assert 'cat <<EOF<<eof\nhello\nworld\nEOF\neof\nNOPRINT'
 assert 'cat <<EOF\nhello\nworld'
 assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT'
 
-echo ---step10---
 assert 'cat Makefile | grep minishell'
 assert 'cat | cat | ls\n\n'
 
-echo ---step11-1---
 assert 'echo $USER'
 assert 'echo $USER$PATH$TERM'
-assert 'echo "$USER	$PATH	$TERM"'
+assert 'echo "$USER   $PATH    $TERM"'
 
-echo ---step11-2---
 assert 'echo $?'
 assert 'invalid\necho $?\necho $?'
 assert 'exit42\necho $?\necho $?'
 assert 'exit42\n\necho $?\necho $?'
 
-echo ---step11-3---
-assert 'cat <<EOF	\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
-assert 'cat <<"EOF"	\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
-assert 'cat <<EO"F"	\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<EOF \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<"EOF" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<EO"F" \n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 export EOF="eof"
-assert 'cat <<$EOF		\neof\nEOF\nEOF'
-assert 'cat <<"$EOF"	\neof\nEOF\nEOF'
-
-echo ---step12---
+assert 'cat <<$EOF \neof\nEOF\nEOF'
+assert 'cat <<"$EOF" \neof\nEOF\nEOF'
 
 echo "int main() { while(1) ; }" | gcc -xc -o infinite_loop -
 
@@ -203,7 +189,5 @@ print_desc "SIGINT to child process"
 (sleep 0.01; pkill -SIGUSR1 infinite_loop;
  sleep 0.01; pkill -SIGUSR1 infinite_loop) &
 assert './infinite_loop'
-
-echo ---finish---
 
 cleanup
