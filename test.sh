@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/03 16:11:24 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 13:25:46 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,21 +34,37 @@ cleanup() {
 }
 
 assert() {
-	printf '%-40s:' "[$1]"
+	COMMAND="$1"
+	shift
+	printf '%-40s:' "[$COMMAND]"
 	
-	echo -n -e "$1" | bash >cmp 2>&-
+	echo -n -e "$COMMAND" | bash >cmp 2>&-
 	expected=$?
-	
-	echo -n -e "$1" | ./minishell >out 2>&-
-	actual=$?
+	for arg in "$@"
+	do
+		mv "$arg" "$arg"".cmp"
+	done
 
-	diff cmp out >/dev/null && echo -n '	diff OK' || echo -n '	diff NG'
+	echo -n -e "$COMMAND" | ./minishell >out 2>&-
+	actual=$?
+	for arg in "$@"
+	do
+		mv "$arg" "$arg"".out"
+	done
+
+	diff cmp out >/dev/null && echo -n "	diff OK" || echo -n "	diff NG"
 	
 	if [ "$actual" = "$expected" ]; then
-		echo -n '	status OK'
+		echo -n "	status OK"
 	else
 		echo -n "	status NG, expected $expected but got $actual"
 	fi
+	for arg in "$@"
+	do
+		echo -n " [$arg] "
+		diff "$arg"".cmp" "$arg"".out" >/dev/null && echo -e -n "$OK" || echo -e -n "$NG"
+		rm -f "$arg"".cmp" "$arg"".out"
+	done
 	echo
 }
 
@@ -83,5 +99,10 @@ assert "echo \"'hello	world'\" \"42tokyo\""
 assert "echo hello'	world'"
 assert "echo hello'	world	'\"	42tokyo	\""
 
+echo ---step9---
+assert 'echo hello >hello.txt' 'hello.txt'
+assert 'echo hello >f1>f2>f3' 'f1' 'f2' 'f3'
+
+echo ---finishe---
+
 cleanup
-echo 'all OK'

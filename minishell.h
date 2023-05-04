@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 20:17:10 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 13:09:06 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <limits.h>
 # include <string.h>
 # include <stdbool.h>
+# include <fcntl.h>
 
 // global var
 extern bool	syntax_error;
@@ -58,8 +59,9 @@ struct s_token
 bool	consume_blank(char **rest, char *line);
 bool	startswith(const char *s, const char *keyword);
 bool	is_metacharacter(char c);
-bool	is_operator(const char *s);
+bool	is_control_operator(const char *s);
 bool 	is_word(const char *s);
+bool	is_redirection_operator(const char *s);
 
 t_token	*new_token(char *word, t_token_kind kind);
 t_token	*tokenize(char *line);
@@ -70,15 +72,21 @@ char	**token_list_to_argv(t_token *tok);
 typedef enum e_node_kind
 {
 	ND_SIMPLE_CMD,
+	ND_REDIR_OUT,
 }	t_node_kind;
 
 typedef struct	s_node t_node;
 
 struct s_node
 {
-	t_token		*args;
 	t_node_kind	kind;
 	t_node		*next;
+	t_token		*args;
+	t_node		*redirects;
+	int			targetfd;
+	t_token		*filename;
+	int			filefd;
+	int			stashed_targetfd;
 };
 
 t_node	*parse(t_token *tok);
@@ -86,6 +94,11 @@ bool	at_eof(t_token *tok);
 
 // step5-2
 void	expand(t_node *node);
+
+// step9
+void	open_redir_file(t_node *redir);
+void	do_redirect(t_node *redir);
+void	reset_redirect(t_node *redir);
 
 // others
 void	fatal_error(const char *msg) __attribute__((noreturn));

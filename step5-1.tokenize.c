@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 19:43:05 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 13:11:07 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_token	*new_token(char *word, t_token_kind kind)
 
 static t_token	*operator(char **rest, char *line)
 {
-	static char *const operators[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "\n"};
+	static char *const operators[] = {">>", "<<", "||", "&", "&&", ";", ";;", "<", ">", "(", ")", "|", "\n"};
 	size_t		i = 0;
 	char		*op;
 
@@ -101,7 +101,7 @@ t_token	*tokenize(char *line)
 	{
 		if (consume_blank(&line, line))
 			continue ;
-		else if (is_operator(line))
+		else if (is_metacharacter(*line))
 			tok = tok->next = operator(&line, line);
 		else if (is_word(line))
 			tok = tok->next = word(&line, line);
