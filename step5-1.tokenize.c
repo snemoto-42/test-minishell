@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 14:05:28 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 15:05:03 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_token	*tokdup(t_token *tok)
 
 static t_token	*operator(char **rest, char *line)
 {
-	static char *const operators[] = {">>", "<<", "||", "&", "&&", ";", ";;", "<", ">", "(", ")", "|", "\n"};
+	static char *const operators[] = {">>", "<<", "||", "&&", ";;", "<", ">", "&", ";", "(", ")", "|", "\n"};
 	size_t		i = 0;
 	char		*op;
 

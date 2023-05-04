@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/03 15:07:49 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 14:34:16 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(void)
 	status = 0;
 	while (1)
 	{
-		line = readline("minishell$> ");
+		line = readline("minishell$ ");
 		if (line == NULL)
 			break ;
 		if (*line)

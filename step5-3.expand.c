@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:56:31 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 12:38:18 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 14:29:35 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static void	expand_quote_removal(t_node *node)
 		return ;
 	remove_quote(node->args);
 	remove_quote(node->filename);
+	remove_quote(node->delimiter);
 	expand_quote_removal(node->redirects);
 	expand_quote_removal(node->next);
 }

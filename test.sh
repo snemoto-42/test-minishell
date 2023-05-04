@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 13:59:56 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 14:43:23 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -115,6 +115,12 @@ assert 'cat <hoge'
 echo ---step9-3---
 assert 'pwd >>pwd.txt' 'pwd.txt'
 assert 'pwd >>pwd.txt \n pwd >> pwd.txt' 'pwd.txt'
+
+echo ---step9-4---
+assert 'cat <<EOF\nhello\nworld\nEOF\nNOPRINT'
+assert 'cat <<EOF<<eof\nhello\nworld\nEOF\neof\nNOPRINT'
+assert 'cat <<EOF\nhello\nworld'
+assert 'cat <<E"O"F\nhello\nworld\nEOF\nNOPRINT'
 
 echo ---finish---
 

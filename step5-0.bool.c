@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 13:09:40 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 15:03:14 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,12 @@ bool	is_metacharacter(char c)
 {
 	if (is_blank(c))
 		return (true);
-	return (c && strchr("|&;()<> \t\n", c));
+	return (c && strchr("|&;()<>\n", c));
+}
+
+bool	is_word(const char *s)
+{
+	return (*s && !is_metacharacter(*s));
 }
 
 bool	startswith(const char *s, const char *keyword)
@@ -54,11 +59,6 @@ bool	is_control_operator(const char *s)
 		i++;
 	}
 	return (false);
-}
-
-bool	is_word(const char *s)
-{
-	return (*s && !is_metacharacter(*s));
 }
 
 bool	is_redirection_operator(const char *s)

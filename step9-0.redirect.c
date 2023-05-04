@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 14:09:51 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 14:31:11 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,17 @@ t_node	*redirect_append(t_token **rest, t_token *tok)
 	node = new_node(ND_REDIR_APPEND);
 	node->filename = tokdup(tok->next);
 	node->targetfd = STDOUT_FILENO;
+	*rest = tok->next->next;
+	return (node);
+}
+
+t_node	*redirect_heredoc(t_token **rest, t_token *tok)
+{
+	t_node	*node;
+
+	node = new_node(ND_REDIR_HEREDOC);
+	node->filename = tokdup(tok->next);
+	node->targetfd = STDIN_FILENO;
 	*rest = tok->next->next;
 	return (node);
 }

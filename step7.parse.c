@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 14:09:16 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 14:45:39 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ static void	append_command_element(t_node *command, t_token **rest, t_token *tok
 		append_node(&command->redirects, redirect_out(&tok, tok));
 	else if (equal_op(tok, "<") && tok->next->kind == TK_WORD)
 		append_node(&command->redirects, redirect_in(&tok, tok));
-	else if (equal_op(tok, ">>") && tok->next->next == TK_WORD)
+	else if (equal_op(tok, ">>") && tok->next->kind == TK_WORD)
 		append_node(&command->redirects, redirect_append(&tok, tok));
+	else if (equal_op(tok, "<<") && tok->next->kind == TK_WORD)
+		append_node(&command->redirects, redirect_heredoc(&tok, tok));
 	else
 		todo("append_command_element");
 	*rest = tok;
