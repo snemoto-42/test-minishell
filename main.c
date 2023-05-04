@@ -6,19 +6,20 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 14:34:16 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:37:32 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	last_status;
+
 int	main(void)
 {
 	char	*line;
-	int		status;
 
 	rl_outstream = stderr;
-	status = 0;
+	last_status = 0;
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -26,10 +27,10 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		interpret(line, &status);
+		interpret(line, &last_status);
 		free(line);
 	}
-	exit(status);
+	exit(last_status);
 }
 // #include <libc.h>
 // __attribute__((destructor))

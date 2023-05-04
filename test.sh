@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 16:16:27 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 16:39:23 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -130,6 +130,12 @@ echo ---step11-1---
 assert 'echo $USER'
 assert 'echo $USER$PATH$TERM'
 assert 'echo "$USER	$PATH	$TERM"'
+
+echo ---step11-2---
+assert 'echo $?'
+assert 'invalid\necho $?\necho $?'
+assert 'exit42\necho $?\necho $?'
+assert 'exit42\n\necho $?\necho $?'
 
 echo ---finish---
 

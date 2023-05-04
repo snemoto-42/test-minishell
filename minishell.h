@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:13:44 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:32:07 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 # include <sys/wait.h>
 # include <ctype.h>
 
+extern int	last_status;
 extern bool	syntax_error;
 
 typedef enum e_token_kind

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:53:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:14:47 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:24:47 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,32 @@ static bool is_alpha_num_under(char c)
 static bool	is_variable(char *s)
 {
 	return (s[0] == '$' && is_alpha_under(s[1]));
+}
+
+static bool	is_special_parameter(char *s)
+{
+	return (s[0] == '$' && s[1] == '?');
+}
+
+static void	append_num(char **dst, unsigned int num)
+{
+	if (num == 0)
+	{
+		append_char(dst, '0');
+		return ;
+	}
+	if (num / 10 != 0)
+		append_num(dst, num / 10);
+	append_char(dst, '0' + (num % 10));
+}
+
+static void	expend_special_parameter_str(char **dst, char **rest, char *p)
+{
+	if (!is_special_parameter(p))
+		assert_error("Expected special parameter");
+	p += 2;
+	append_num(dst, last_status);
+	*rest = p;
 }
 
 static void	expand_variable_str(char **dst, char **rest, char *p)
@@ -80,6 +106,8 @@ static void	append_double_quote(char **dst, char **rest, char *p)
 				assert_error("Unclosed double quote");
 			else if (is_variable(p))
 				expand_variable_str(dst, &p, p);
+			else if (is_special_parameter(p))
+				expend_special_parameter_str(dst, &p, p);
 			else
 				append_char(dst, *p++);
 		}
@@ -109,6 +137,8 @@ static void	expand_variable_tok(t_token *tok)
 			append_double_quote(&new_word, &p, p);
 		else if (is_variable(p))
 			expand_variable_str(&new_word, &p, p);
+		else if (is_special_parameter(p))
+			expend_special_parameter_str(&new_word, &p, p);
 		else
 			append_char(&new_word, *p++);
 	}
