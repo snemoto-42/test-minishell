@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:37:32 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 17:00:18 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(void)
 	char	*line;
 
 	rl_outstream = stderr;
+	setup_signal();
 	last_status = 0;
 	while (1)
 	{

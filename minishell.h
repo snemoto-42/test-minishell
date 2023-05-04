@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:45:16 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 17:13:29 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,12 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <ctype.h>
+# include <signal.h>
 
-extern int	last_status;
-extern bool	syntax_error;
+extern int						last_status;
+extern bool						syntax_error;
+extern bool 					readline_interrupted;
+extern volatile sig_atomic_t	sig;
 
 typedef enum e_token_kind
 {
@@ -135,5 +138,8 @@ t_node	*new_node(t_node_kind kind);
 void	prepare_pipe(t_node *node);
 void	prepare_pipe_child(t_node *node);
 void	prepare_pipe_parent(t_node *node);
+
+void	setup_signal(void);
+void	reset_signal(void);
 
 #endif

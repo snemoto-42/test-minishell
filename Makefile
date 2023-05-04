@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 15:53:51 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 17:29:28 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,29 +24,45 @@ MINISHELL_SRCS = \
 					step7.parse.c \
 					step9-0.redirect.c \
 					step9-1.redirect_op.c \
-					step10.pipe.c
+					step10.pipe.c \
+					step12.signal.c
 
-CC		= cc
-CFLAGS	= -Wall -Wextra -Werror
-# CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
-RM		= rm -f
 NAME	= minishell
+CC		= cc
+RLDIR	= $(shell brew --prefix readline)
+INCLUDE	= -I include -I$(RLDIR)/include
+CFLAGS	= -Wall -Wextra -Werror $(INCLUDES)
+# CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
+LIBS	= -lreadline -L$(RLDIR)/lib
+RM		= rm -f
 SRCS	= ${MINISHELL_SRCS}
 OBJS	= ${MINISHELL_SRCS:.c=.o}
 
-$(NAME): ${OBJS}
-		${CC} ${CFLAGS} ${SRCS} -lreadline -o ${NAME}
+all:	$(NAME)
 
-all:	${NAME}
+$(NAME): $(OBJS)
+		$(CC) $(CFLAGS) $(LIBS) -o $(NAME) $(OBJS)
 
 clean:
-		${RM} ${OBJS}
+		$(RM) $(OBJS)
 
 fclean:	clean
-		${RM} ${NAME}
+		$(RM) $(NAME)
 
 re:		fclean all
 
 bonus:	all
 
 .PHONY: all clean fclean re bonus
+
+OS := $(shell uname -s)
+
+ifeq ($(OS),Linux)
+
+endif
+
+ifeq ($(OS),Darwin)
+		RLDIR 	= $(shell brew --prefix readline)
+		INCLUDE += -I$(RLDIR)/include
+		LIBS	+= -L$(RLDIR)/lib
+endif

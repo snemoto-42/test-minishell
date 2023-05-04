@@ -6,11 +6,17 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 16:53:04 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 17:41:02 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #!/bin/bash
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+RESET="\033[0m"
+OK=$GREEN"OK"$RESET
+NG=$RED"NG"$RESET
 
 cat <<EOF | gcc -xc -o a.out -
 #include <stdio.h>
@@ -25,11 +31,17 @@ int main(int argc, char **argv) {
 }
 EOF
 
+print_desc(){
+		echo -e $YELLOW"$1"$RESET
+}
+
 cleanup() {
 	rm -f cmp out
 	rm -f bash.txt minishell.txt
 	rm -f a.out
 	rm -f print_args
+	rm -f exit42
+	rm -f infinite_loop
 	make fclean
 }
 
@@ -144,6 +156,49 @@ assert 'cat <<EO"F"	\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
 export EOF="eof"
 assert 'cat <<$EOF		\neof\nEOF\nEOF'
 assert 'cat <<"$EOF"	\neof\nEOF\nEOF'
+
+echo ---step12---
+
+echo "int main() { while(1) ; }" | gcc -xc -o infinite_loop -
+
+print_desc "SIGTERM to SHELL"
+(sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGTERM minishell) &
+assert './infinite_loop' 2>/dev/null
+
+print_desc "SIGQUIT to SHELL"
+(sleep 0.01; pkill -SIGQUIT bash;
+ sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGQUIT minishell
+ sleep 0.01; pkill -SIGTERM minishell) &
+assert './infinite_loop' 2>/dev/null
+
+print_desc "SIGINT to SHELL"
+(sleep 0.01; pkill -SIGINT bash;
+ sleep 0.01; pkill -SIGTERM bash;
+ sleep 0.01; pkill -SIGINT minishell
+ sleep 0.01; pkill -SIGTERM minishell) &
+assert './infinite_loop' 2>/dev/null
+
+print_desc "SIGTERM to child process"
+(sleep 0.01; pkill -SIGTERM infinite_loop;
+ sleep 0.01; pkill -SIGTERM infinite_loop) &
+assert './infinite_loop'
+
+print_desc "SIGINT to child process"
+(sleep 0.01; pkill -SIGINT infinite_loop;
+ sleep 0.01; pkill -SIGINT infinite_loop) &
+assert './infinite_loop'
+
+print_desc "SIGINT to child process"
+(sleep 0.01; pkill -SIGQUIT infinite_loop;
+ sleep 0.01; pkill -SIGQUIT infinite_loop) &
+assert './infinite_loop'
+
+print_desc "SIGINT to child process"
+(sleep 0.01; pkill -SIGUSR1 infinite_loop;
+ sleep 0.01; pkill -SIGUSR1 infinite_loop) &
+assert './infinite_loop'
 
 echo ---finish---
 

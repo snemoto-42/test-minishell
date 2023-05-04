@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 15:22:32 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:59:50 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static pid_t	exec_pipeline(t_node *node)
 		fatal_error("fork");
 	else if (pid == 0)
 	{
+		reset_signal();
 		prepare_pipe_child(node);
 		do_redirect(node->command->redirects);
 		argv = token_list_to_argv(node->command->args);
@@ -62,11 +63,20 @@ static int	wait_pipeline(pid_t last_pid)
 	{
 		wait_result = wait(&wstatus);
 		if (wait_result == last_pid)
-			status = WEXITSTATUS(wstatus);
+		{
+			if (WEXITSTATUS(wstatus))
+				status = 128 + WTERMSIG(wstatus);
+			else
+				status = WEXITSTATUS(wstatus);
+		}
 		else if (wait_result < 0)
 		{
 			if (errno == ECHILD)
 				break ;
+			else if (errno == EINTR)
+				continue ;
+			else
+				fatal_error("wait");
 		}
 	}
 	return (status);
