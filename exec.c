@@ -6,11 +6,43 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:19:43 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 19:32:42 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static char	*search_path(const char *filename)
+{
+	char	path[PATH_MAX];
+	char	*value;
+	char	*end;
+	char	*dup;
+
+	value = getenv("PATH");
+	while (*value)
+	{
+		bzero(path, PATH_MAX);
+		end = strchr(value, ':');
+		if (end)
+			strncpy(path, value, end - value);
+		else
+			strlcpy(path, value, PATH_MAX);
+		strlcat(path, "/", PATH_MAX);
+		strlcat(path, filename, PATH_MAX);
+		if (access(path, X_OK) == 0)
+		{	
+			dup = strdup(path);
+			if (dup == NULL)
+				fatal_error("strdup");
+			return (dup);
+		}
+		if (end == NULL)
+			return (NULL);
+		value = end + 1;
+	}
+	return (NULL);
+}
 
 static void	validate_access(const char *path, const char *filename)
 {
@@ -82,7 +114,7 @@ static int	wait_pipeline(pid_t last_pid)
 	return (status);
 }
 
-static int	exec(t_node *node)
+int	exec(t_node *node)
 {
 	pid_t	last_pid;
 	int		status;
@@ -92,29 +124,4 @@ static int	exec(t_node *node)
 	last_pid = exec_pipeline(node);
 	status = wait_pipeline(last_pid);
 	return (status);
-}
-
-void	interpret(char *line, int *stat_loc)
-{
-	t_token	*tok;
-	t_node	*node;
-
-	tok = tokenize(line);
-	if (at_eof(tok))
-		;
-	else if (g_syntax_error)
-		*stat_loc = ERROR_TOKENIZE;
-	else
-	{
-		node = parse(tok);
-		if (g_syntax_error)
-			*stat_loc = ERROR_PARSE;
-		else
-		{
-			expand(node);
-			*stat_loc = exec(node);
-		}
-		free_node(node);
-	}
-	free_tok(tok);
 }

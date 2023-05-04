@@ -6,13 +6,38 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:21:35 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 19:32:26 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_last_status;
+
+static void	interpret(char *line, int *stat_loc)
+{
+	t_token	*tok;
+	t_node	*node;
+
+	tok = tokenize(line);
+	if (at_eof(tok))
+		;
+	else if (g_syntax_error)
+		*stat_loc = ERROR_TOKENIZE;
+	else
+	{
+		node = parse(tok);
+		if (g_syntax_error)
+			*stat_loc = ERROR_PARSE;
+		else
+		{
+			expand(node);
+			*stat_loc = exec(node);
+		}
+		free_node(node);
+	}
+	free_tok(tok);
+}
 
 int	main(void)
 {

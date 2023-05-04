@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:39:12 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:59:10 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,39 +40,4 @@ bool	is_metacharacter(char c)
 bool	is_word(const char *s)
 {
 	return (*s && !is_metacharacter(*s));
-}
-
-bool	startswith(const char *s, const char *keyword)
-{
-	return (memcmp(s, keyword, strlen(keyword)) == 0);
-}
-
-bool	is_control_operator(t_token *tok)
-{
-	static char *const	operators[] = {"||", "&", "&&", ";", ";;", "(", ")", "|", "\n"};
-	size_t				i;
-
-	i = 0;
-	while (i < sizeof(operators) / sizeof(*operators))
-	{
-		if (startswith(tok->word, operators[i]))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-bool	is_redirection_operator(const char *s)
-{
-	static char *const	operators[] = {">", "<", ">>", "<<"};
-	size_t				i;
-
-	i = 0;
-	while (i < sizeof(operators) / sizeof(*operators))
-	{
-		if (startswith(s, operators[i]))
-			return (true);
-		i++;
-	}
-	return (false);
 }

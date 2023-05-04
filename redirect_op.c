@@ -1,23 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step9-0.redirect.c                                 :+:      :+:    :+:   */
+/*   redirect_op.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:35:00 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 19:54:49 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	equal_op(t_token *tok, char *op)
-{
-	if (tok->kind != TK_OP)
-		return (false);
-	return (strcmp(tok->word, op) == 0);
-}
 
 t_node	*redirect_out(t_token **rest, t_token *tok)
 {

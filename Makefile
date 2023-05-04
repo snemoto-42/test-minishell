@@ -6,26 +6,33 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 18:10:37 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 19:43:12 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 MINISHELL_SRCS = \
-					main.c \
 					destructor.c \
-					error.c \
-					step3.exec_path.c \
-					step4.exec_filename.c \
-					step5-0.bool.c \
-					step5-1.tokenize.c \
-					step5-2.token_to_argv.c \
-					step5-3.expand.c \
-					step5-4.expand_op.c \
-					step7.parse.c \
-					step9-0.redirect.c \
-					step9-1.redirect_op.c \
-					step10.pipe.c \
-					step12.signal.c
+					error_location.c \
+					error_msg.c \
+					exec.c \
+					expand_append.c \
+					expand_is.c \
+					expand_remove.c \
+					expand_var.c \
+					main.c \
+					parse_append.c \
+					parse.c \
+					pipe.c \
+					redirect_op.c \
+					redirect_util.c \
+					redirect.c \
+					signal_util.c \
+					signal.c \
+					tokenize_is_op.c \
+					tokenize_is.c \
+					tokenize_to_argv.c \
+					tokenize_word.c \
+					tokenize.c
 
 NAME	= minishell
 CC		= cc

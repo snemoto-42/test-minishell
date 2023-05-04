@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step5-3.expand.c                                   :+:      :+:    :+:   */
+/*   step5-3.expand_remove.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:56:31 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:35:33 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 19:17:49 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	append_char(char **s, char c)
-{
-	size_t	size;
-	char	*new;
-
-	size = 2;
-	if (*s)
-		size += strlen(*s);
-	new = malloc(size);
-	if (new == NULL)
-		fatal_error("malloc");
-	if (*s)
-		strlcpy(new, *s, size);
-	new[size - 2] = c;
-	new[size - 1] = '\0';
-	if (*s)
-		free(*s);
-	*s = new;
-}
 
 static void	remove_single_quote(char **dst, char **rest, char *p)
 {

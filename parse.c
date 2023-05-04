@@ -6,31 +6,11 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:35:15 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 19:21:17 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	append_tok(t_token **tok, t_token *elm)
-{
-	if (*tok == NULL)
-	{
-		*tok = elm;
-		return ;
-	}
-	append_tok(&(*tok)->next, elm);
-}
-
-static void	append_node(t_node **node, t_node *elm)
-{
-	if (*node == NULL)
-	{
-		*node = elm;
-		return ;
-	}
-	append_node(&(*node)->next, elm);
-}
 
 bool	at_eof(t_token *tok)
 {
@@ -46,26 +26,6 @@ t_node	*new_node(t_node_kind kind)
 		fatal_error("calloc");
 	node->kind = kind;
 	return (node);
-}
-
-static void	append_command_element(t_node *command, t_token **rest, t_token *tok)
-{
-	if (tok->kind == TK_WORD)
-	{
-		append_tok(&command->args, tokdup(tok));
-		tok = tok->next;
-	}
-	else if (equal_op(tok, ">") && tok->next->kind == TK_WORD)
-		append_node(&command->redirects, redirect_out(&tok, tok));
-	else if (equal_op(tok, "<") && tok->next->kind == TK_WORD)
-		append_node(&command->redirects, redirect_in(&tok, tok));
-	else if (equal_op(tok, ">>") && tok->next->kind == TK_WORD)
-		append_node(&command->redirects, redirect_append(&tok, tok));
-	else if (equal_op(tok, "<<") && tok->next->kind == TK_WORD)
-		append_node(&command->redirects, redirect_heredoc(&tok, tok));
-	else
-		todo("append_command_element");
-	*rest = tok;
 }
 
 static t_node	*simple_command(t_token **rest, t_token *tok)

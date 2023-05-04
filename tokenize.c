@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step5-1.tokenize.c                                 :+:      :+:    :+:   */
+/*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:37:48 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 19:53:00 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,6 @@ t_token	*new_token(char *word, t_token_kind kind)
 	tok->word = word;
 	tok->kind = kind;
 	return (tok);
-}
-
-t_token	*tokdup(t_token *tok)
-{
-	char	*word;
-
-	word = strdup(tok->word);
-	if (word == NULL)
-		fatal_error("strdup");
-	return (new_token(word, tok->kind));
 }
 
 static t_token	*operator(char **rest, char *line)
@@ -55,49 +45,6 @@ static t_token	*operator(char **rest, char *line)
 	}
 	assert_error("Unexpected Operator");
 	return (NULL);
-}
-
-static t_token	*word(char **rest, char *line)
-{
-	const char	*start = line;
-	char		*word;
-
-	while (*line && !is_metacharacter(*line))
-	{
-		if (*line == SINGLE_QUOTE_CHAR)
-		{
-			line++;
-			while (*line != SINGLE_QUOTE_CHAR)
-				line++;
-			if (*line == '\0')
-			{
-				tokenize_error("Unclosed single quote", &line, line);
-				break ;
-			}
-			else
-				line++;
-		}
-		else if (*line == DOUBLE_QUOTE_CHAR)
-		{
-			line++;
-			while (*line != DOUBLE_QUOTE_CHAR)
-				line++;
-			if (*line == '\0')
-			{
-				tokenize_error("Unclosed double quote", &line, line);
-				break ;
-			}
-			else
-				line++;
-		}
-		else
-			line++;
-	}
-	word = strndup(start, line - start);
-	if (word == NULL)
-		fatal_error("strndup");
-	*rest = line;
-	return (new_token(word, TK_WORD));
 }
 
 t_token	*tokenize(char *line)

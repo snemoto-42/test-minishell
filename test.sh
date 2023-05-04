@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 18:23:38 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 18:45:45 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,10 @@ int main(int argc, char **argv) {
 	for (int i = 0; argv[i]; i++)
 		printf("argv[%d] = %s\n", i, argv[i]);
 }
+EOF
+
+cat <<EOF | gcc -xc -o exit42 -
+int main() { return 42; }
 EOF
 
 print_desc(){

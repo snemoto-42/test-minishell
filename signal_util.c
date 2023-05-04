@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   step12.signal.c                                    :+:      :+:    :+:   */
+/*   step12.signal_util.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:55:39 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:40:08 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 19:34:00 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	handler(int signum)
 	g_sig = signum;
 }
 
-static void	reset_sig(int signum)
+void	reset_sig(int signum)
 {
 	struct sigaction	sa;
 
@@ -30,7 +30,7 @@ static void	reset_sig(int signum)
 		fatal_error("sigaction");
 }
 
-static void	ignore_sig(int signum)
+void	ignore_sig(int signum)
 {
 	struct sigaction	sa;
 
@@ -41,7 +41,7 @@ static void	ignore_sig(int signum)
 		fatal_error("sigaction");
 }
 
-static void	setup_sigint(void)
+void	setup_sigint(void)
 {
 	struct sigaction	sa;
 
@@ -49,10 +49,10 @@ static void	setup_sigint(void)
 	sa.sa_flags = 0;
 	sa.sa_handler = handler;
 	if (sigaction(SIGINT, &sa, NULL) < 0)
-		fatal_error("sigaction");	
+		fatal_error("sigaction");
 }
 
-static int	check_state(void)
+int	check_state(void)
 {
 	if (g_sig == 0)
 		return (0);
@@ -65,22 +65,4 @@ static int	check_state(void)
 		return (0);
 	}
 	return (0);
-}
-
-void	setup_signal(void)
-{
-	extern int	_rl_echo_control_chars;
-
-	_rl_echo_control_chars = 0;
-	rl_outstream = stderr;
-	if (isatty(STDIN_FILENO))
-		rl_event_hook = check_state;
-	ignore_sig(SIGQUIT);
-	setup_sigint();
-}
-
-void	reset_signal(void)
-{
-	reset_sig(SIGQUIT);
-	reset_sig(SIGINT);
 }
