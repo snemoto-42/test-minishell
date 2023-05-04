@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:15:49 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:19:43 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,12 @@ void	interpret(char *line, int *stat_loc)
 	tok = tokenize(line);
 	if (at_eof(tok))
 		;
-	else if (syntax_error)
+	else if (g_syntax_error)
 		*stat_loc = ERROR_TOKENIZE;
 	else
 	{
 		node = parse(tok);
-		if (syntax_error)
+		if (g_syntax_error)
 			*stat_loc = ERROR_PARSE;
 		else
 		{

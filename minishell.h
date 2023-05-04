@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 17:13:29 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:18:58 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@
 # include <ctype.h>
 # include <signal.h>
 
-extern int						last_status;
-extern bool						syntax_error;
-extern bool 					readline_interrupted;
-extern volatile sig_atomic_t	sig;
+extern int						g_last_status;
+extern bool						g_syntax_error;
+extern bool 					g_readline_interrupted;
+extern volatile sig_atomic_t	g_sig;
 
 typedef enum e_token_kind
 {

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:53:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:44:56 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:20:11 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	expend_special_parameter_str(char **dst, char **rest, char *p)
 	if (!is_special_parameter(p))
 		assert_error("Expected special parameter");
 	p += 2;
-	append_num(dst, last_status);
+	append_num(dst, g_last_status);
 	*rest = p;
 }
 

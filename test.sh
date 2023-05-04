@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 17:41:02 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 18:23:38 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -190,7 +190,7 @@ print_desc "SIGINT to child process"
  sleep 0.01; pkill -SIGINT infinite_loop) &
 assert './infinite_loop'
 
-print_desc "SIGINT to child process"
+print_desc "SIGQUIT to child process"
 (sleep 0.01; pkill -SIGQUIT infinite_loop;
  sleep 0.01; pkill -SIGQUIT infinite_loop) &
 assert './infinite_loop'
