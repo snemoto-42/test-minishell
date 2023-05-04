@@ -6,11 +6,13 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 17:02:48 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:13:12 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	readline_interrupted = false;
 
 static int	stashfd(int fd)
 {

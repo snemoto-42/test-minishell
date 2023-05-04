@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 17:29:28 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 18:10:37 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ NAME	= minishell
 CC		= cc
 RLDIR	= $(shell brew --prefix readline)
 INCLUDE	= -I include -I$(RLDIR)/include
-CFLAGS	= -Wall -Wextra -Werror $(INCLUDES)
+CFLAGS	= -Wall -Wextra -Werror $(INCLUDE)
 # CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
 LIBS	= -lreadline -L$(RLDIR)/lib
 RM		= rm -f

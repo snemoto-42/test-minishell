@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:59:50 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 18:15:49 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	wait_pipeline(pid_t last_pid)
 		wait_result = wait(&wstatus);
 		if (wait_result == last_pid)
 		{
-			if (WEXITSTATUS(wstatus))
+			if (WIFSIGNALED(wstatus))
 				status = 128 + WTERMSIG(wstatus);
 			else
 				status = WEXITSTATUS(wstatus);
