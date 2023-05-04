@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 15:48:00 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:52:24 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	stashfd(int fd)
 	return (stashfd);
 }
 
-static int	read_heredoc(const char *delimiter)
+static int	read_heredoc(const char *delimiter, bool is_delim_unquoted)
 {
 	char	*line;
 	int		pfd[2];
@@ -41,6 +41,8 @@ static int	read_heredoc(const char *delimiter)
 			free(line);
 			break ;
 		}
+		if (is_delim_unquoted)
+			line = expand_heredoc_line(line);
 		dprintf(pfd[1], "%s\n", line);
 		free(line);
 	}
@@ -69,7 +71,7 @@ int		open_redir_file(t_node *node)
 	else if (node->kind == ND_REDIR_APPEND)
 		node->filefd = open(node->filename->word, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (node->kind == ND_REDIR_HEREDOC)
-		node->filefd = read_heredoc(node->delimiter->word);
+		node->filefd = read_heredoc(node->delimiter->word, node->is_delim_unquoted);
 	else
 		assert_error("open_redir_file");
 	if (node->filefd < 0)

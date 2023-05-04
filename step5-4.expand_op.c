@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:53:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:24:47 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:44:56 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,4 +156,26 @@ void	expand_variable(t_node *node)
 	expand_variable(node->redirects);
 	expand_variable(node->command);
 	expand_variable(node->next);
+}
+
+char	*expand_heredoc_line(char *line)
+{
+	char	*new_word;
+	char	*p;
+
+	p = line;
+	new_word = calloc(1, sizeof(char));
+	if (new_word == NULL)
+		fatal_error("calloc");
+	while (*p)
+	{
+		if (is_variable(p))
+			expand_variable_str(&new_word, &p, p);
+		else if (is_special_parameter(p))
+			expend_special_parameter_str(&new_word, &p, p);
+		else
+			append_char(&new_word, *p++);
+	}
+	free(line);
+	return (new_word);
 }

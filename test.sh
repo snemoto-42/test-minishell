@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 16:39:23 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/04 16:53:04 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ cleanup() {
 assert() {
 	COMMAND="$1"
 	shift
-	printf '%-40s:' "[$COMMAND]"
+	printf '%-60s:' "[$COMMAND]"
 	
 	echo -n -e "$COMMAND" | bash >cmp 2>&-
 	expected=$?
@@ -136,6 +136,14 @@ assert 'echo $?'
 assert 'invalid\necho $?\necho $?'
 assert 'exit42\necho $?\necho $?'
 assert 'exit42\n\necho $?\necho $?'
+
+echo ---step11-3---
+assert 'cat <<EOF	\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<"EOF"	\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+assert 'cat <<EO"F"	\n$USER\n$NO_SUCH_VAR\n$FOO$BAR\nEOF'
+export EOF="eof"
+assert 'cat <<$EOF		\neof\nEOF\nEOF'
+assert 'cat <<"$EOF"	\neof\nEOF\nEOF'
 
 echo ---finish---
 

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 16:32:07 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/04 16:45:16 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ struct s_node
 	int			targetfd;
 	t_token		*filename;
 	t_token		*delimiter;
+	bool		is_delim_unquoted;
 	int			filefd;
 	int			stashed_targetfd;
 	int			inpipe[2];
@@ -117,6 +118,7 @@ void	append_char(char **s, char c);
 void	expand(t_node *node);
 
 void	expand_variable(t_node *node);
+char	*expand_heredoc_line(char *line);
 
 int		open_redir_file(t_node *redir);
 void	do_redirect(t_node *redir);
