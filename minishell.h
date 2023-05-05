@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 15:02:23 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 15:59:17 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,18 @@
 # define DOUBLE_QUOTE_CHAR '"'
 # define ERROR_PREFIX "minishell: "
 
-# include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <stdlib.h>
+# include <stdbool.h>
+# include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <limits.h>
-# include <string.h>
-# include <stdbool.h>
 # include <fcntl.h>
-# include <errno.h>
 # include <sys/wait.h>
-# include <ctype.h>
 # include <signal.h>
-
-typedef struct s_global
-{
-	bool					g_syntax_error;
-	int						g_last_status;
-	bool					g_readline_interrupted;
-	volatile sig_atomic_t	g_sig;
-}	t_global;
-
-extern t_global				g_var;
-
-typedef struct s_token		t_token;
-typedef struct s_node		t_node;
+# include <errno.h>
 
 typedef enum e_token_kind
 {
@@ -54,13 +40,6 @@ typedef enum e_token_kind
 	TK_OP,
 	TK_EOF,
 }	t_token_kind;
-
-struct s_token
-{
-	char			*word;
-	t_token_kind	kind;
-	t_token			*next;
-};
 
 typedef enum e_node_kind
 {
@@ -72,21 +51,41 @@ typedef enum e_node_kind
 	ND_REDIR_HEREDOC,
 }	t_node_kind;
 
+typedef struct s_global
+{
+	volatile sig_atomic_t	g_sig;
+	bool					g_syntax_error;
+	bool					g_readline_interrupted;
+	int						g_last_status;
+}	t_global;
+
+extern t_global				g_var;
+
+typedef struct s_token		t_token;
+typedef struct s_node		t_node;
+
+struct s_token
+{
+	char					*word;
+	t_token_kind			kind;
+	t_token					*next;
+};
+
 struct s_node
 {
-	t_node_kind	kind;
-	t_node		*next;
-	t_token		*args;
-	t_node		*redirects;
-	int			targetfd;
-	t_token		*filename;
-	t_token		*delim;
-	bool		is_delim_unquote;
-	int			filefd;
-	int			stashed_targetfd;
-	int			inpipe[2];
-	int			outpipe[2];
-	t_node		*command;
+	t_node_kind				kind;
+	t_node					*next;
+	t_node					*redirects;
+	t_node					*command;
+	t_token					*args;
+	t_token					*filename;
+	t_token					*delim;
+	bool					is_delim_unquote;
+	int						targetfd;
+	int						filefd;
+	int						stashed_targetfd;
+	int						inpipe[2];
+	int						outpipe[2];
 };
 
 // destructor
@@ -102,6 +101,15 @@ void	err_exit(const char *location, const char *msg, int status)
 		__attribute__((noreturn));
 void	xperror(const char *location);
 void	tokenize_error(const char *location, char **rest, char *line);
+
+// exec
+int		expand_and_exec(t_node *node);
+
+void	prepare_pipe(t_node *node);
+void	prepare_pipe_child(t_node *node);
+void	prepare_pipe_parent(t_node *node);
+
+char	**token_list_to_argv(t_token *tok);
 
 // expand
 void	append_char(char **s, char c);
@@ -128,13 +136,6 @@ void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 bool	is_eof(t_token *tok);
 t_node	*new_node(t_node_kind kind);
 t_node	*parse(t_token *tok);
-
-// pipe
-int		expand_and_exec(t_node *node);
-
-void	prepare_pipe(t_node *node);
-void	prepare_pipe_child(t_node *node);
-void	prepare_pipe_parent(t_node *node);
 
 // redirect
 t_node	*redirect_out(t_token **rest, t_token *tok);
@@ -166,8 +167,6 @@ bool	is_metacharacter(char c);
 bool	is_word(const char *s);
 bool	is_control_operator(t_token *tok);
 bool	startswith(const char *s, const char *keyword);
-
-char	**token_list_to_argv(t_token *tok);
 
 t_token	*word(char **rest, char *line);
 

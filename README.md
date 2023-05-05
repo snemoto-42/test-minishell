@@ -40,6 +40,66 @@ void	tokenize_error(const char *location, char **rest, char *line);
 ```
 ・tokenize系で使用
 
+## exec_pipe_prepare.c
+```
+static void	cpy_pipe(int dst[2], int src[2]);
+```
+TEXTTEXT
+
+```
+void	prepare_pipe(t_node *node);
+```
+TEXTTEXT
+
+```
+void	prepare_pipe_child(t_node *node);
+```
+TEXTTEXT
+
+```
+void	prepare_pipe_parent(t_node *node);
+```
+TEXTTEXT
+
+## exec_pipe.c
+```
+static char	*search_path(const char *filename);
+```
+TEXTTEXT
+
+```
+static void	validate_access(const char *path, const char *filename);
+```
+TEXTTEXT
+
+```
+static pid_t	exec_pipeline(t_node *node);
+```
+TEXTTEXT
+
+```
+static int		wait_pipeline(pid_t last_pid);
+```
+TEXTTEXT
+
+```
+int	expand_and_exec(t_node *node);
+```
+・変数variable展開->quote削除の順にnodeを変更していく。
+
+・nodeの種類kindに応じたリダイレクト処理、コマンドの実行を行う。
+
+## exec_token_to_argv.c
+```
+static char	**tail_recursive(t_token *tok, int nargs, char **argv);
+```
+TEXTTEXT
+
+```
+char	**token_list_to_argv(t_token *tok);
+```
+TEXTTEXT
+
 ## expand_append.c
 ```
 void	append_char(char **s, char c);
@@ -135,6 +195,7 @@ static void	init_g_var(t_global g_var);
 ```
 TEXTTEXT
 
+```
 static void	interpret(char *line, int *stat_loc);
 ```
 ・tokenize->parse->expand->execの順にプロンプトに入力されたlineを実行していく。
@@ -188,56 +249,6 @@ TEXTTEXT
 
 ```
 t_node	*parse(t_token *tok);
-```
-TEXTTEXT
-
-## pipe_exec.c
-```
-static char	*search_path(const char *filename);
-```
-TEXTTEXT
-
-```
-static void	validate_access(const char *path, const char *filename);
-```
-TEXTTEXT
-
-```
-static pid_t	exec_pipeline(t_node *node);
-```
-TEXTTEXT
-
-```
-static int		wait_pipeline(pid_t last_pid);
-```
-TEXTTEXT
-
-```
-int	expand_and_exec(t_node *node);
-```
-・変数variable展開->quote削除の順にnodeを変更していく。
-
-・nodeの種類kindに応じたリダイレクト処理、コマンドの実行を行う。
-```
-
-## pipe_prepare.c
-```
-static void	cpy_pipe(int dst[2], int src[2]);
-```
-TEXTTEXT
-
-```
-void	prepare_pipe(t_node *node);
-```
-TEXTTEXT
-
-```
-void	prepare_pipe_child(t_node *node);
-```
-TEXTTEXT
-
-```
-void	prepare_pipe_parent(t_node *node);
 ```
 TEXTTEXT
 
@@ -359,17 +370,6 @@ TEXTTEXT
 
 ```
 bool	startswith(const char *s, const char *keyword);
-```
-TEXTTEXT
-
-## tokenize_to_argv.c
-```
-static char	**tail_recursive(t_token *tok, int nargs, char **argv);
-```
-TEXTTEXT
-
-```
-char	**token_list_to_argv(t_token *tok);
 ```
 TEXTTEXT
 
