@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 11:46:22 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 14:00:23 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_token	*tokenize(char *line)
 	t_token	head;
 	t_token	*tok;
 
-	g_syntax_error = false;
+	g_var.g_syntax_error = false;
 	head.next = NULL;
 	tok = &head;
 	while (*line)

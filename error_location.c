@@ -6,13 +6,11 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 13:46:33 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 11:37:58 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 13:59:48 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	g_syntax_error = false;
 
 void	xperror(const char *location)
 {
@@ -22,7 +20,7 @@ void	xperror(const char *location)
 
 void	tokenize_error(const char *location, char **rest, char *line)
 {
-	g_syntax_error = true;
+	g_var.g_syntax_error = true;
 	perror_prefix();
 	dprintf(STDERR_FILENO, "syntax err near '%c' in %s\n", *line, location);
 	while (*line)
@@ -32,7 +30,7 @@ void	tokenize_error(const char *location, char **rest, char *line)
 
 void	parse_error(const char *location, t_token **rest, t_token *tok)
 {
-	g_syntax_error = true;
+	g_var.g_syntax_error = true;
 	perror_prefix();
 	dprintf(STDERR_FILENO, "syntax err near '%s' in %s\n", tok->word, location);
 	while (tok && !is_eof(tok))

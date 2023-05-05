@@ -3,6 +3,17 @@ The following is the file structure and function descriptions for minishell.
 
 UPDATED 2023/05/05
 
+## destructor.c
+```
+void	free_tok(t_token *tok);
+```
+・再帰的にnode->wordとnodeをfreeしていく
+
+```
+void	free_node(t_node *node);
+```
+・再帰的にtokとnodeをfreeしていく
+
 ## error_location.c
 ```
 void	xperror(const char *location);
@@ -131,14 +142,9 @@ TEXTTEXT
 
 ## main.c
 ```
-void	free_tok(t_token *tok);
+static void	init_g_var(t_global g_var);
 ```
-・再帰的にnode->wordとnodeをfreeしていく
-
-```
-void	free_node(t_node *node);
-```
-・再帰的にtokとnodeをfreeしていく
+TEXTTEXT
 
 ```
 static int	expand_and_exec(t_node *node);

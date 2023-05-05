@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 13:23:55 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 14:03:28 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,18 @@
 # include <ctype.h>
 # include <signal.h>
 
-extern bool						g_syntax_error;
-extern int						g_last_status;
-extern bool						g_readline_interrupted;
-extern volatile sig_atomic_t	g_sig;
+typedef struct s_global
+{
+	bool					g_syntax_error;
+	int						g_last_status;
+	bool					g_readline_interrupted;
+	volatile sig_atomic_t	g_sig;
+}	t_global;
 
-typedef struct s_token			t_token;
-typedef struct s_node			t_node;
+extern t_global				g_var;
+
+typedef struct s_token		t_token;
+typedef struct s_node		t_node;
 
 typedef enum e_token_kind
 {
@@ -83,6 +88,10 @@ struct s_node
 	int			outpipe[2];
 	t_node		*command;
 };
+
+// destructor
+void	free_tok(t_token *tok);
+void	free_node(t_node *node);
 
 // error
 void	xperror(const char *location);

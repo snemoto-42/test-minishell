@@ -6,35 +6,20 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 13:19:28 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 14:02:48 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_last_status = 0;
+t_global	g_var;
 
-static void	free_tok(t_token *tok)
+static void	init_g_var(t_global g_var)
 {
-	if (tok == NULL)
-		return ;
-	if (tok->word)
-		free(tok->word);
-	free_tok(tok->next);
-	free(tok);
-}
-
-static void	free_node(t_node *node)
-{
-	if (node == NULL)
-		return ;
-	free_tok(node->args);
-	free_tok(node->filename);
-	free_tok(node->delim);
-	free_node(node->redirects);
-	free_node(node->next);
-	free_node(node->command);
-	free(node);
+	g_var.g_syntax_error = false;
+	g_var.g_last_status = 0;
+	g_var.g_readline_interrupted = false;
+	g_var.g_sig = 0;
 }
 
 static int	expand_and_exec(t_node *node)
@@ -59,12 +44,12 @@ static void	interpret(char *line, int *stat_loc)
 	tok = tokenize(line);
 	if (is_eof(tok))
 		;
-	else if (g_syntax_error)
+	else if (g_var.g_syntax_error)
 		*stat_loc = ERROR_TOKENIZE;
 	else
 	{
 		node = parse(tok);
-		if (g_syntax_error)
+		if (g_var.g_syntax_error)
 			*stat_loc = ERROR_PARSE;
 		else
 			*stat_loc = expand_and_exec(node);
@@ -79,6 +64,7 @@ int	main(void)
 
 	rl_outstream = stderr;
 	setup_signal();
+	init_g_var(g_var);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -86,10 +72,10 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		interpret(line, &g_last_status);
+		interpret(line, &(g_var.g_last_status));
 		free(line);
 	}
-	exit(g_last_status);
+	exit(g_var.g_last_status);
 }
 
 // #include <libc.h>

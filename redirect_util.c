@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 11:48:48 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 14:00:06 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,13 @@ int	read_heredoc(const char *delimiter, bool is_delim_unquoted)
 
 	if (pipe(pfd) < 0)
 		fatal_error("pipe");
-	g_readline_interrupted = false;
+	g_var.g_readline_interrupted = false;
 	while (1)
 	{
 		line = readline("> ");
 		if (line == NULL)
 			break ;
-		if (g_readline_interrupted)
+		if (g_var.g_readline_interrupted)
 		{
 			free(line);
 			break ;
@@ -74,7 +74,7 @@ int	read_heredoc(const char *delimiter, bool is_delim_unquoted)
 		free(line);
 	}
 	close(pfd[1]);
-	if (g_readline_interrupted)
+	if (g_var.g_readline_interrupted)
 	{
 		close(pfd[0]);
 		return (-1);
