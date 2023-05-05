@@ -1,69 +1,65 @@
 # minishell
 The following is the file structure and function descriptions for minishell.
+UPDATED 2023/05/05
+
 ## 	destructor.c
-### void	free_node(t_node *node);
+	void	free_node(t_node *node);
 TEXTTEXT
-### void	free_tok(t_token *tok);
+	void	free_tok(t_token *tok);
 TEXTTEXT
-### void	free_argv(char **argv);
+	void	free_argv(char **argv);
 TEXTTEXT
+
 ## error_location.c
-### functions
+	void	xperror(const char *location);
 TEXTTEXT
+	void	tokenize_error(const char *location, char **rest, char *line);
+TEXTTEXT
+	void	parse_error(const char *location, t_token **rest, t_token *tok);
+TEXTTEXT
+
 ## error_msg.c
-### functions
+	void	perror_prefix(void);
 TEXTTEXT
+	void	fatal_error(const char *msg) __attribute__((noreturn));
+TEXTTEXT
+	void	assert_error(const char *msg) __attribute__((noreturn));
+TEXTTEXT
+	void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
+TEXTTEXT
+
 ## exec.c
-### functions
-TEXTTEXT
+
 ## expand_append.c
-### functions
-TEXTTEXT
+
 ## expand_is.c
-### functions
-TEXTTEXT
+
 ## expand_remove.c
-### functions
-TEXTTEXT
+
 ## expand_var.c
-### functions
-TEXTTEXT
+
 ## main.c
-### functions
-TEXTTEXT
+
 ## parse_append.c
-### functions
-TEXTTEXT
+
 ## parse.c
-### functions
-TEXTTEXT
+
 ## pipe.c
-### functions
-TEXTTEXT
+
 ## redirect_op.c
-### functions
-TEXTTEXT
+
 ## redirect_util.c
-### functions
-TEXTTEXT
+
 ## redirect.c
-### functions
-TEXTTEXT
+
 ## signal_util.c
-### functions
-TEXTTEXT
+
 ## signal.c
-### functions
-TEXTTEXT
+
 ## tokenize_is.c
-### functions
-TEXTTEXT
+
 ## tokenize_to_argv.c
-### functions
-TEXTTEXT
+
 ## tokenize_word.c
-### functions
-TEXTTEXT
+
 ## tokenize.c
-### functions
-TEXTTEXT
