@@ -290,7 +290,7 @@ int		stashfd(int fd);
 TEXTTEXT
 
 ```
-int		read_heredoc(const char *delimiter, bool is_delim_unquoted);
+int		read_heredoc(const char *delim, bool is_delim_unquoted);
 ```
 TEXTTEXT
 

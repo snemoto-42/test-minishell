@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 15:01:34 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 17:41:15 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ t_global	g_var;
 
 static void	init_g_var(t_global g_var)
 {
-	g_var.g_syntax_error = false;
-	g_var.g_last_status = 0;
-	g_var.g_readline_interrupted = false;
 	g_var.g_sig = 0;
+	g_var.g_syntax_error = false;
+	g_var.g_rl_interrupted = false;
+	g_var.g_last_status = 0;
 }
 
 static void	interpret(char *line, int *stat_loc)
@@ -58,14 +58,8 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		interpret(line, &(g_var.g_last_status));
+		interpret(line, &g_var.g_last_status);
 		free(line);
 	}
 	exit(g_var.g_last_status);
 }
-
-// #include <libc.h>
-// __attribute__((destructor))
-// static void destructor() {
-// system("leaks -q minishell");
-// }

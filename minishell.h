@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 15:59:17 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 17:41:30 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_global
 {
 	volatile sig_atomic_t	g_sig;
 	bool					g_syntax_error;
-	bool					g_readline_interrupted;
+	bool					g_rl_interrupted;
 	int						g_last_status;
 }	t_global;
 
@@ -146,7 +146,7 @@ t_node	*redirect_heredoc(t_token **rest, t_token *tok);
 bool	equal_op(t_token *tok, char *op);
 bool	is_redirect(t_node *node);
 int		stashfd(int fd);
-int		read_heredoc(const char *delimiter, bool is_delim_unquoted);
+int		read_heredoc(const char *delim, bool is_delim_unquoted);
 
 int		open_redir_file(t_node *redir);
 void	do_redirect(t_node *redir);

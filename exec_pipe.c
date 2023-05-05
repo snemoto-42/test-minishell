@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_exec.c                                        :+:      :+:    :+:   */
+/*   exec_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 15:01:57 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 17:27:19 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ static void	validate_access(const char *path, const char *filename)
 
 static pid_t	exec_pipeline(t_node *node)
 {
-	extern char		**environ;
-	char			*path;
-	pid_t			pid;
-	char			**argv;
+	extern char	**environ;
+	pid_t		pid;
+	char		*path;
+	char		**argv;
 
 	if (node == NULL)
 		return (-1);

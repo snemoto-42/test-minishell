@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:55:39 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 14:00:18 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 17:40:58 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	check_state(void)
 	else if (g_var.g_sig == SIGINT)
 	{
 		g_var.g_sig = 0;
-		g_var.g_readline_interrupted = true;
+		g_var.g_rl_interrupted = true;
 		rl_replace_line("", 0);
 		rl_done = 1;
 		return (0);
