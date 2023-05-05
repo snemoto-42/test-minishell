@@ -6,13 +6,13 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:03:22 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:22:02 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	at_eof(t_token *tok)
+bool	is_eof(t_token *tok)
 {
 	return (tok->kind == TK_EOF);
 }
@@ -34,7 +34,7 @@ static t_node	*simple_command(t_token **rest, t_token *tok)
 
 	node = new_node(ND_SIMPLE_CMD);
 	append_command_element(node, &tok, tok);
-	while (tok && !at_eof(tok) && !is_control_operator(tok))
+	while (tok && !is_eof(tok) && !is_control_operator(tok))
 		append_command_element(node, &tok, tok);
 	*rest = tok;
 	return (node);

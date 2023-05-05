@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 14:56:31 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:03:08 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:28:28 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static void	remove_quote(t_token *tok)
 	remove_quote(tok->next);
 }
 
-static void	expand_quote_removal(t_node *node)
+void	expand_quote_removal(t_node *node)
 {
 	if (node == NULL)
 		return ;
@@ -83,10 +83,4 @@ static void	expand_quote_removal(t_node *node)
 	expand_quote_removal(node->redirects);
 	expand_quote_removal(node->command);
 	expand_quote_removal(node->next);
-}
-
-void	expand(t_node *node)
-{
-	expand_variable(node);
-	expand_quote_removal(node);
 }

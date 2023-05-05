@@ -6,13 +6,31 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 19:32:26 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:31:10 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_last_status;
+int	g_last_status = 0;
+
+static void	expand(t_node *node)
+{
+	expand_variable(node);
+	expand_quote_removal(node);
+}
+
+static int	exec(t_node *node)
+{
+	pid_t	last_pid;
+	int		status;
+
+	if (open_redir_file(node) < 0)
+		return (ERRPR_OPEN_REDIR);
+	last_pid = exec_pipeline(node);
+	status = wait_pipeline(last_pid);
+	return (status);
+}
 
 static void	interpret(char *line, int *stat_loc)
 {
@@ -20,7 +38,7 @@ static void	interpret(char *line, int *stat_loc)
 	t_node	*node;
 
 	tok = tokenize(line);
-	if (at_eof(tok))
+	if (is_eof(tok))
 		;
 	else if (g_syntax_error)
 		*stat_loc = ERROR_TOKENIZE;
@@ -45,7 +63,6 @@ int	main(void)
 
 	rl_outstream = stderr;
 	setup_signal();
-	g_last_status = 0;
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -58,6 +75,7 @@ int	main(void)
 	}
 	exit(g_last_status);
 }
+
 // #include <libc.h>
 // __attribute__((destructor))
 // static void destructor() {

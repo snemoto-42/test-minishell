@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 13:46:33 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:54:12 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:24:35 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,4 @@ void	err_exit(const char *location, const char *msg, int status)
 	perror_prefix();
 	dprintf(STDERR_FILENO, "%s: %s\n", location, msg);
 	exit(status);
-}
-
-void	todo(const char *msg)
-{
-	perror_prefix();
-	dprintf(STDERR_FILENO, "TODO: %s\n", msg);
-	exit(255);
 }

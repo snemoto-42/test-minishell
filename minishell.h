@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:23:57 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:32:37 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,12 @@ struct s_node
 	t_node		*command;
 };
 
+// destructor
 void	free_node(t_node *node);
 void	free_tok(t_token *tok);
 void	free_argv(char **argv);
 
+// error
 void	xperror(const char *location);
 void	tokenize_error(const char *location, char **rest, char *line);
 void	parse_error(const char *location, t_token **rest, t_token *tok);
@@ -96,10 +98,8 @@ void	perror_prefix(void);
 void	fatal_error(const char *msg) __attribute__((noreturn));
 void	assert_error(const char *msg) __attribute__((noreturn));
 void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
-void	todo(const char *msg) __attribute__((noreturn));
 
-int		exec(t_node *node);
-
+// expand
 void	append_char(char **s, char c);
 void	append_num(char **dst, unsigned int num);
 void	append_single_quote(char **dst, char **rest, char *p);
@@ -110,26 +110,32 @@ bool	is_alpha_num_under(char c);
 bool	is_variable(char *s);
 bool	is_special_parameter(char *s);
 
-void	expand(t_node *node);
+void	expand_quote_removal(t_node *node);
 
 void	expend_special_parameter_str(char **dst, char **rest, char *p);
 void	expand_variable_str(char **dst, char **rest, char *p);
 void	expand_variable(t_node *node);
 char	*expand_heredoc_line(char *line);
 
+// parse
 t_token	*tokdup(t_token *tok);
 void	append_tok(t_token **tok, t_token *elm);
 void	append_node(t_node **node, t_node *elm);
 void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 
-bool	at_eof(t_token *tok);
-t_token	*new_token(char *word, t_token_kind kind);
+bool	is_eof(t_token *tok);
+t_node	*new_node(t_node_kind kind);
 t_node	*parse(t_token *tok);
+
+// pipe
+pid_t	exec_pipeline(t_node *node);
+int		wait_pipeline(pid_t last_pid);
 
 void	prepare_pipe(t_node *node);
 void	prepare_pipe_child(t_node *node);
 void	prepare_pipe_parent(t_node *node);
 
+// redirect
 t_node	*redirect_out(t_token **rest, t_token *tok);
 t_node	*redirect_in(t_token **rest, t_token *tok);
 t_node	*redirect_append(t_token **rest, t_token *tok);
@@ -144,6 +150,7 @@ int		open_redir_file(t_node *redir);
 void	do_redirect(t_node *redir);
 void	reset_redirect(t_node *redir);
 
+// signal
 void	reset_sig(int signum);
 void	ignore_sig(int signum);
 void	setup_sigint(void);
@@ -152,18 +159,18 @@ int		check_state(void);
 void	setup_signal(void);
 void	reset_signal(void);
 
-bool	startswith(const char *s, const char *keyword);
-bool	is_control_operator(t_token *tok);
-
-bool	consume_blank(char **rest, char *line);
+// tokenize
+bool	is_blank(char c);
 bool	is_metacharacter(char c);
 bool	is_word(const char *s);
+bool	is_control_operator(t_token *tok);
+bool	startswith(const char *s, const char *keyword);
 
 char	**token_list_to_argv(t_token *tok);
 
 t_token	*word(char **rest, char *line);
 
-t_node	*new_node(t_node_kind kind);
+t_token	*new_token(char *word, t_token_kind kind);
 t_token	*tokenize(char *line);
 
 #endif

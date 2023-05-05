@@ -6,11 +6,24 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:32:56 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:15:59 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static bool	consume_blank(char **rest, char *line)
+{
+	if (is_blank(*line))
+	{
+		while (*line && is_blank(*line))
+			line++;
+		*rest = line;
+		return (true);
+	}
+	*rest = line;
+	return (false);
+}
 
 t_token	*new_token(char *word, t_token_kind kind)
 {

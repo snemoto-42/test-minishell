@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 13:46:33 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:53:50 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:21:52 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	parse_error(const char *location, t_token **rest, t_token *tok)
 	g_syntax_error = true;
 	perror_prefix();
 	dprintf(STDERR_FILENO, "syntax error near unexpected token '%s' in %s\n", tok->word, location);
-	while (tok && !at_eof(tok))
+	while (tok && !is_eof(tok))
 		tok = tok->next;
 	*rest = tok;
 }
