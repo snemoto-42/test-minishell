@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 14:03:28 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 14:44:31 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,14 @@ void	free_tok(t_token *tok);
 void	free_node(t_node *node);
 
 // error
-void	xperror(const char *location);
-void	tokenize_error(const char *location, char **rest, char *line);
-void	parse_error(const char *location, t_token **rest, t_token *tok);
-
-void	perror_prefix(void);
 void	fatal_error(const char *msg)
 		__attribute__((noreturn));
 void	assert_error(const char *msg)
 		__attribute__((noreturn));
 void	err_exit(const char *location, const char *msg, int status)
 		__attribute__((noreturn));
+void	xperror(const char *location);
+void	tokenize_error(const char *location, char **rest, char *line);
 
 // expand
 void	append_char(char **s, char c);
@@ -126,8 +123,6 @@ char	*expand_heredoc_line(char *line);
 
 // parse
 t_token	*tokdup(t_token *tok);
-void	append_tok(t_token **tok, t_token *elm);
-void	append_node(t_node **node, t_node *elm);
 void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 
 bool	is_eof(t_token *tok);

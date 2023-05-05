@@ -14,28 +14,7 @@ void	free_node(t_node *node);
 ```
 ・再帰的にtokとnodeをfreeしていく
 
-## error_location.c
-```
-void	xperror(const char *location);
-```
-TEXTTEXT
-
-```
-void	tokenize_error(const char *location, char **rest, char *line);
-```
-TEXTTEXT
-
-```
-void	parse_error(const char *location, t_token **rest, t_token *tok);
-```
-TEXTTEXT
-
-## error_msg.c
-```
-void	perror_prefix(void);
-```
-TEXTTEXT
-
+## error.c
 ```
 void	fatal_error(const char *msg) __attribute__((noreturn));
 ```
@@ -50,6 +29,16 @@ TEXTTEXT
 void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
 ```
 TEXTTEXT
+
+```
+void	xperror(const char *location);
+```
+・perrorの呼び出し、redirect.cでのみ使用
+
+```
+void	tokenize_error(const char *location, char **rest, char *line);
+```
+・tokenize系で使用
 
 ## expand_append.c
 ```
@@ -165,17 +154,17 @@ int	main(void);
 
 ## parse_append.c
 ```
+static void	append_tok(t_token **tok, t_token *elm);
+```
+TEXTTEXT
+
+```
+static void	append_node(t_node **node, t_node *elm);
+```
+TEXTTEXT
+
+```
 t_token	*tokdup(t_token *tok);
-```
-TEXTTEXT
-
-```
-void	append_tok(t_token **tok, t_token *elm);
-```
-TEXTTEXT
-
-```
-void	append_node(t_node **node, t_node *elm);
 ```
 TEXTTEXT
 
