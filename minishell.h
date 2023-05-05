@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 14:44:31 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 15:02:23 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,8 +130,7 @@ t_node	*new_node(t_node_kind kind);
 t_node	*parse(t_token *tok);
 
 // pipe
-pid_t	exec_pipeline(t_node *node);
-int		wait_pipeline(pid_t last_pid);
+int		expand_and_exec(t_node *node);
 
 void	prepare_pipe(t_node *node);
 void	prepare_pipe_child(t_node *node);

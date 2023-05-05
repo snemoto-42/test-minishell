@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 11:31:41 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 15:01:57 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	validate_access(const char *path, const char *filename)
 		err_exit(filename, "command not found", 127);
 }
 
-pid_t	exec_pipeline(t_node *node)
+static pid_t	exec_pipeline(t_node *node)
 {
 	extern char		**environ;
 	char			*path;
@@ -85,7 +85,7 @@ pid_t	exec_pipeline(t_node *node)
 	return (pid);
 }
 
-int	wait_pipeline(pid_t last_pid)
+static int	wait_pipeline(pid_t last_pid)
 {
 	pid_t	wait_result;
 	int		status;
@@ -111,5 +111,19 @@ int	wait_pipeline(pid_t last_pid)
 				fatal_error("wait");
 		}
 	}
+	return (status);
+}
+
+int	expand_and_exec(t_node *node)
+{
+	pid_t	last_pid;
+	int		status;
+
+	expand_variable(node);
+	expand_quote_removal(node);
+	if (open_redir_file(node) < 0)
+		return (ERRPR_OPEN_REDIR);
+	last_pid = exec_pipeline(node);
+	status = wait_pipeline(last_pid);
 	return (status);
 }

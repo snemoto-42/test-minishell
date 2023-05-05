@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 14:49:51 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 15:01:34 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,6 @@ static void	init_g_var(t_global g_var)
 	g_var.g_last_status = 0;
 	g_var.g_readline_interrupted = false;
 	g_var.g_sig = 0;
-}
-
-static int	expand_and_exec(t_node *node)
-{
-	pid_t	last_pid;
-	int		status;
-
-	expand_variable(node);
-	expand_quote_removal(node);
-	if (open_redir_file(node) < 0)
-		return (ERRPR_OPEN_REDIR);
-	last_pid = exec_pipeline(node);
-	status = wait_pipeline(last_pid);
-	return (status);
 }
 
 static void	interpret(char *line, int *stat_loc)

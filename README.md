@@ -135,14 +135,6 @@ static void	init_g_var(t_global g_var);
 ```
 TEXTTEXT
 
-```
-static int	expand_and_exec(t_node *node);
-```
-・変数variable展開->quote削除の順にnodeを変更していく。
-
-・nodeの種類kindに応じたリダイレクト処理、コマンドの実行を行う。
-
-```
 static void	interpret(char *line, int *stat_loc);
 ```
 ・tokenize->parse->expand->execの順にプロンプトに入力されたlineを実行していく。
@@ -211,16 +203,24 @@ static void	validate_access(const char *path, const char *filename);
 TEXTTEXT
 
 ```
-pid_t	exec_pipeline(t_node *node);
+static pid_t	exec_pipeline(t_node *node);
 ```
 TEXTTEXT
 
 ```
-int		wait_pipeline(pid_t last_pid);
+static int		wait_pipeline(pid_t last_pid);
 ```
 TEXTTEXT
 
-## pipe.c
+```
+int	expand_and_exec(t_node *node);
+```
+・変数variable展開->quote削除の順にnodeを変更していく。
+
+・nodeの種類kindに応じたリダイレクト処理、コマンドの実行を行う。
+```
+
+## pipe_prepare.c
 ```
 static void	cpy_pipe(int dst[2], int src[2]);
 ```
