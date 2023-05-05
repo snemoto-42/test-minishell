@@ -6,57 +6,54 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:51:36 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 20:39:53 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/05 11:10:04 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-MINISHELL_SRCS = \
-					destructor.c \
-					error_location.c \
-					error_msg.c \
-					exec.c \
-					expand_append.c \
-					expand_is.c \
-					expand_remove.c \
-					expand_var.c \
-					main.c \
-					parse_append.c \
-					parse.c \
-					pipe.c \
-					redirect_op.c \
-					redirect_util.c \
-					redirect.c \
-					signal_util.c \
-					signal.c \
-					tokenize_is.c \
-					tokenize_to_argv.c \
-					tokenize_word.c \
-					tokenize.c
+# ********* #
+# Variables #
+# ********* #
+
 
 NAME	= minishell
+SRCS	= $(shell echo *.c)
+OBJDIR	= obj/
+OBJS	= $(SRCS:%.c=$(OBJDIR)%.o)
+
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror $(INCLUDE)
 LIBS	= -lreadline
-RM		= rm -f
-SRCS	= ${MINISHELL_SRCS}
-OBJS	= ${MINISHELL_SRCS:.c=.o}
 
-all:	$(NAME)
+# ************* #
+# General Rules #
+# ************* #
+
+all:	$(OBJDIR) $(NAME)
+
+$(OBJDIR):
+		mkdir -p obj
+
+$(OBJDIR)%.o: %.c
+		$(CC) $(CFLAGS) -c -o $@ $<
 
 $(NAME): $(OBJS)
 		$(CC) $(CFLAGS) $(LIBS) -o $(NAME) $(OBJS)
 
 clean:
-		$(RM) $(OBJS)
+		rm -rf $(OBJDIR)
 
 fclean:	clean
-		$(RM) $(NAME)
+		rm -f $(NAME)
 
 re:		fclean all
 
 bonus:	all
 
 .PHONY: all clean fclean re bonus
+
+# ********************** #
+# Platform Compatibility #
+# ********************** #
 
 OS := $(shell uname -s)
 
