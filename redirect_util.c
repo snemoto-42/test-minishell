@@ -6,13 +6,11 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 19:55:46 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:48:48 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-bool	g_readline_interrupted = false;
 
 bool	equal_op(t_token *tok, char *op)
 {

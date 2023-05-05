@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 13:43:37 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 18:18:30 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:44:17 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_node(t_node *node)
 		return ;
 	free_tok(node->args);
 	free_tok(node->filename);
-	free_tok(node->delimiter);
+	free_tok(node->delim);
 	free_node(node->redirects);
 	free_node(node->next);
 	free_node(node->command);

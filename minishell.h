@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 11:32:37 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:44:04 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ struct s_node
 	t_node		*redirects;
 	int			targetfd;
 	t_token		*filename;
-	t_token		*delimiter;
-	bool		is_delim_unquoted;
+	t_token		*delim;
+	bool		is_delim_unquote;
 	int			filefd;
 	int			stashed_targetfd;
 	int			inpipe[2];
@@ -95,9 +95,12 @@ void	tokenize_error(const char *location, char **rest, char *line);
 void	parse_error(const char *location, t_token **rest, t_token *tok);
 
 void	perror_prefix(void);
-void	fatal_error(const char *msg) __attribute__((noreturn));
-void	assert_error(const char *msg) __attribute__((noreturn));
-void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
+void	fatal_error(const char *msg)
+		__attribute__((noreturn));
+void	assert_error(const char *msg)
+		__attribute__((noreturn));
+void	err_exit(const char *location, const char *msg, int status)
+		__attribute__((noreturn));
 
 // expand
 void	append_char(char **s, char c);

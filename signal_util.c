@@ -6,13 +6,14 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:55:39 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:03:38 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 11:49:07 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 volatile sig_atomic_t	g_sig = 0;
+bool					g_readline_interrupted = false;
 
 static void	handler(int signum)
 {
