@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 11:36:58 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 13:19:28 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,36 @@
 
 int	g_last_status = 0;
 
-static void	expand(t_node *node)
+static void	free_tok(t_token *tok)
 {
-	expand_variable(node);
-	expand_quote_removal(node);
+	if (tok == NULL)
+		return ;
+	if (tok->word)
+		free(tok->word);
+	free_tok(tok->next);
+	free(tok);
 }
 
-static int	exec(t_node *node)
+static void	free_node(t_node *node)
+{
+	if (node == NULL)
+		return ;
+	free_tok(node->args);
+	free_tok(node->filename);
+	free_tok(node->delim);
+	free_node(node->redirects);
+	free_node(node->next);
+	free_node(node->command);
+	free(node);
+}
+
+static int	expand_and_exec(t_node *node)
 {
 	pid_t	last_pid;
 	int		status;
 
+	expand_variable(node);
+	expand_quote_removal(node);
 	if (open_redir_file(node) < 0)
 		return (ERRPR_OPEN_REDIR);
 	last_pid = exec_pipeline(node);
@@ -48,10 +67,7 @@ static void	interpret(char *line, int *stat_loc)
 		if (g_syntax_error)
 			*stat_loc = ERROR_PARSE;
 		else
-		{
-			expand(node);
-			*stat_loc = exec(node);
-		}
+			*stat_loc = expand_and_exec(node);
 		free_node(node);
 	}
 	free_tok(tok);

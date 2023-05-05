@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 11:44:04 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/05 13:23:55 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,6 @@ struct s_node
 	int			outpipe[2];
 	t_node		*command;
 };
-
-// destructor
-void	free_node(t_node *node);
-void	free_tok(t_token *tok);
-void	free_argv(char **argv);
 
 // error
 void	xperror(const char *location);
