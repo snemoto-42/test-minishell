@@ -3,11 +3,19 @@ The following is the file structure and function descriptions for minishell.
 UPDATED 2023/05/05
 
 ## 	destructor.c
+```
 	void	free_node(t_node *node);
+```
 TEXTTEXT
+
+```
 	void	free_tok(t_token *tok);
+```
 TEXTTEXT
+
+```
 	void	free_argv(char **argv);
+```
 TEXTTEXT
 
 ## error_location.c
