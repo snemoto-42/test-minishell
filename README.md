@@ -118,7 +118,7 @@ static void	validate_access(const char *path, const char *filename);
 - pathが有効かどうか判定
 
 ```
-static void		exec_child(t_node *node);
+static void	exec_child(t_node *node);
 ```
 - 子プロセス内で、シグナル設定、fdの下準備、execveに与えるpath/argvの生成、execveによる実行を行う
 
@@ -128,7 +128,7 @@ static pid_t	exec_pipeline(t_node *node);
 - fdの下準備を行い、子プロセスを生成
 
 ```
-static int		wait_pipeline(pid_t last_pid);
+static int	wait_pipeline(pid_t last_pid);
 ```
 - 最後に実行されたプロセスのPIDを受け取り、そのPIDのプロセスが終了するまで待機
 - プロセスが終了すると、そのステータスを取得し、次のプロセスの実行のためにループが続く
@@ -326,7 +326,7 @@ void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 
 ## parse_redirect_op.c
 ```
-- t_node	*redirect_out(t_token **rest, t_token *tok);
+t_node	*redirect_out(t_token **rest, t_token *tok);
 ```
 - '>'ノードを新たに生成
 
