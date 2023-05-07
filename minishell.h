@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 12:17:13 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 13:57:53 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,9 @@ struct s_node
 	t_token					*filename;
 	t_token					*delim;
 	bool					is_delim_unquote;
-	int						targetfd;
 	int						filefd;
-	int						stashed_targetfd;
+	int						targetfd;
+	int						new_targetfd;
 	int						inpipe[2];
 	int						outpipe[2];
 };
@@ -107,14 +107,14 @@ int		read_heredoc(const char *delim, bool is_delim_unquoted);
 
 void	prepare_pipe(t_node *node);
 void	prepare_pipe_child(t_node *node);
-void	prepare_pipe_parent(t_node *node);
+void	close_pipe(t_node *node);
 
 int		expand_and_exec(t_node *node);
 
 void	do_redirect(t_node *redir);
 void	reset_redirect(t_node *redir);
 
-int		stashfd(int fd);
+int		change_fd(int fd);
 int		open_redir_file(t_node *redir);
 
 char	*search_path(const char *filename);

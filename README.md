@@ -1,8 +1,6 @@
 # minishell
 The following is the file structure and function descriptions for minishell.
 
-UPDATED 2023/05/05
-
 ## メモリ確保
 - static char	*search_path(const char *filename);
 - char			**token_list_to_argv(t_token *tok);
@@ -89,43 +87,50 @@ int		read_heredoc(const char *delim, bool is_delim_unquoted);
 ```
 static void	cpy_pipe(int dst[2], int src[2]);
 ```
-- TEXTTEXT
+- パイプのコピー
 
 ```
 void	prepare_pipe(t_node *node);
 ```
-- TEXTTEXT
+- 与えられたノードがパイプ処理の出力先である場合、次のノードに対してパイプを準備
+- 与えられたノードがパイプ処理の最後のノードである場合、何もしない
+- pipeシステムコールを呼び出してパイプを作成し、次のノードの入力用パイプにコピー
+- パイプ処理のための入力と出力の間にパイプを設定
 
 ```
 void	prepare_pipe_child(t_node *node);
 ```
-- TEXTTEXT
+- 子プロセスがパイプを使用して標準入力と標準出力を切り替えるための準備
+- 次のコマンドの標準出力をパイプでつながれた前のコマンドの標準入力にリダイレクトするための処理を行う
 
 ```
-void	prepare_pipe_parent(t_node *node);
+void	close_pipe(t_node *node);
 ```
-- TEXTTEXT
+- パイプを使ってコマンドをつなぐ際に、子プロセスが使用するパイプのファイルディスクリプタをクローズする
 
 ## exec_pipe.c
 ```
 static void	validate_access(const char *path, const char *filename);
 ```
-- TEXTTEXT
+- pathが有効かどうか判定
 
 ```
 static void		exec_child(t_node *node);
 ```
-- TEXTTEXT
+- 子プロセス内で、シグナル設定、fdの下準備、execveに与えるpath/argvの生成、execveによる実行を行う
 
 ```
 static pid_t	exec_pipeline(t_node *node);
 ```
-- TEXTTEXT
+- fdの下準備を行い、子プロセスを生成
 
 ```
 static int		wait_pipeline(pid_t last_pid);
 ```
-- TEXTTEXT
+- 最後に実行されたプロセスのPIDを受け取り、そのPIDのプロセスが終了するまで待機
+- プロセスが終了すると、そのステータスを取得し、次のプロセスの実行のためにループが続く
+- 全てのプロセスが終了した場合、関数はパイプラインの終了ステータスを返す
+- 子プロセスの終了を待つ間にエラーが発生した場合、関数はエラーメッセージを出力して終了
 
 ```
 int	expand_and_exec(t_node *node);
@@ -137,33 +142,40 @@ int	expand_and_exec(t_node *node);
 ```
 bool	is_redirect(t_node *node);
 ```
-- TEXTTEXT
+- node->kindがリダイレクトかどうか判定
 
 ```
 void	do_redirect(t_node *redir);
 ```
-- TEXTTEXT
+- targetfdを新しいnew_targetfdに変更
+- filefdにtargetfdを割り当てる
 
 ```
 void	reset_redirect(t_node *redir);
 ```
-- TEXTTEXT
+- 再帰的にnextの方からクローズしていく
+- filefd, targetfdをクローズ
+- new_targetfdにtargetfdを割り当てる
 
 ## exec_redirect_open.c
 ```
-int		stashfd(int fd);
+int		change_fd(int fd);
 ```
-- TEXTTEXT
+- 元のfdをクローズして、新しいfdを返す
 
 ```
 static int	check_redir_file(t_node *node);
 ```
-- TEXTTEXT
+- node->kindに応じて、リダイレクトのfilefdをオープンしていく
+- O_CREAT: ファイルが存在しない場合に、新規にファイルを作成することを指定します。
+- O_TRUNC: ファイルがすでに存在する場合に、ファイルサイズを0に切り詰める
+- O_APPENDは、ファイルの末尾に追記する
+- '0644'は、6桁の8進数で表され、先頭の0は8進数であることを示す。所有者に読み書き権限、グループに読み取り権限、その他のユーザに読み取り権限を与える
 
 ```
 int		open_redir_file(t_node *redir);
 ```
-- TEXTTEXT
+- node->kindに応じて、再帰的にnodeのfilefdをオープンしていく
 
 ## exec_search_path.c
 ```
@@ -191,85 +203,86 @@ char	**token_list_to_argv(t_token *tok);
 ```
 void	append_num(char **dst, unsigned int num);
 ```
-- TEXTTEXT
+- 数字を文字に変換して追記
 
 ```
 void	append_char(char **s, char c);
 ```
-- TEXTTEXT
+- メモリを新たに確保して１文字追記
 
 ```
 void	append_single_quote(char **dst, char **rest, char *p);
 ```
-- TEXTTEXT
+- シングルクオートで囲まれた文字列を追記
 
 ```
 void	append_double_quote(char **dst, char **rest, char *p);
 ```
-- TEXTTEXT
+- ダブルクオートで囲まれた文字列を追記。
+- 追記中に変数かスペシャル変数があるか確認。
 
 ## expand_is.c
 ```
 bool	is_alpha_under(char c);
 ```
-- TEXTTEXT
+- アルファベットかアンダースコアか判定
 
 ```
 bool	is_alpha_num_under(char c);
 ```
-- TEXTTEXT
+- アルファベットかアンダースコアか数字か判定
 
 ```
 bool	is_variable(char *s);
 ```
-- TEXTTEXT
+- $に加えて、アルファベットかアンダースコアか判定
 
 ```
 bool	is_special_parameter(char *s);
 ```
-- TEXTTEXT
+- スペシャル変数（$?）か判定
 
 ## expand_remove.c
 ```
 static void	remove_single_quote(char **dst, char **rest, char *p);
 ```
-- TEXTTEXT
+- シングルクオートで囲まれた文字列をコピー
 
 ```
 static void	remove_double_quote(char **dst, char **rest, char *p);
 ```
-- TEXTTEXT
+- ダブルクオートで囲まれた文字列をコピー
 
 ```
 static void	remove_quote(t_token *tok);
 ```
-- TEXTTEXT
+- 条件分岐によりシングルクオート、ダブルクオートを除去
 
 ```
 void	expand_quote_removal(t_node *node);
 ```
-- TEXTTEXT
+- 再帰的に全てのnodeのクオートを除去する
 
 ## expand_var.c
 ```
 void	expend_special_parameter_str(char **dst, char **rest, char *p);
 ```
-- TEXTTEXT
+- newwordにステータス番号を代入
 
 ```
 void	expand_variable_str(char **dst, char **rest, char *p);
 ```
-- TEXTTEXT
+- getenvを利用してnewwordに変数展開した内容を代入
 
 ```
 static void	expand_variable_tok(t_token *tok);
 ```
-- TEXTTEXT
+- 条件分岐によりシングルクオート、ダブルクオート、変数、スペシャル変数（$?）を展開
 
 ```
 void	expand_variable(t_node *node);
 ```
-- TEXTTEXT
+- 再帰的に全てのnodeの変数を展開する
 
 ## main.c
 ```
@@ -291,43 +304,43 @@ int	main(void);
 ```
 t_token	*tokdup(t_token *tok);
 ```
-- TEXTTEXT
+- tok->wordを新たに生成
 
 ```
 static void	append_tok(t_token **tok, t_token *elm);
 ```
-- TEXTTEXT
+- 最後のtokに新たなtok->wordを代入
 
 ```
 static void	append_node(t_node **node, t_node *elm);
 ```
-- TEXTTEXT
+- 最後のnodeに新たなリダイレクトのノードを代入
 
 ```
 void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 ```
-- TEXTTEXT
+- tok->kindやリダイレクトの有無によって新たなtokenやnodeを生成
 
 ## parse_redirect_op.c
 ```
 - t_node	*redirect_out(t_token **rest, t_token *tok);
 ```
-- TEXTTEXT
+- '>'ノードを新たに生成
 
 ```
 t_node	*redirect_in(t_token **rest, t_token *tok);
 ```
-- TEXTTEXT
+- '<'ノードを新たに生成
 
 ```
 t_node	*redirect_append(t_token **rest, t_token *tok);
 ```
-- TEXTTEXT
+- '>>'ノードを新たに生成
 
 ```
 t_node	*redirect_heredoc(t_token **rest, t_token *tok);
 ```
-- TEXTTEXT
+- '<<'ノードを新たに生成
 
 ## parse.c
 ```
@@ -341,14 +354,16 @@ t_node	*new_node(t_node_kind kind);
 -  新しいnodeを生成
 
 ```
-static t_node	*simple_command(t_token **rest, t_token *tok);
+static t_node	*new_command_node(t_token **rest, t_token *tok);
 ```
-- TEXTTEXT
+- 新しいnode->commandの生成
 
 ```
 t_node	*parse(t_token **rest, t_token *tok);
 ```
-- TEXTTEXT
+- nodeを生成していく
+- tokが'|'の場合は再帰的にparseを呼び出す。
+- nodeのinpipe/outpipeを初期化
 
 ## signal_util.c
 ```

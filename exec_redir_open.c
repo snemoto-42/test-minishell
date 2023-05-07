@@ -6,22 +6,22 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 12:15:03 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 13:23:31 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	stashfd(int fd)
+int	change_fd(int fd)
 {
-	int	stashfd;
+	int	newfd;
 
-	stashfd = fcntl(fd, F_DUPFD, 10);
-	if (stashfd < 0)
+	newfd = fcntl(fd, F_DUPFD, 10);
+	if (newfd < 0)
 		fatal_error("fcntl");
 	if (close(fd) < 0)
 		fatal_error("close");
-	return (stashfd);
+	return (newfd);
 }
 
 static int	check_redir_file(t_node *node)
@@ -66,6 +66,6 @@ int	open_redir_file(t_node *node)
 			xperror(node->filename->word);
 		return (-1);
 	}
-	node->filefd = stashfd(node->filefd);
+	node->filefd = change_fd(node->filefd);
 	return (open_redir_file(node->next));
 }

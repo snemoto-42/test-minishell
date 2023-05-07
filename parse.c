@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 11:47:37 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 12:48:32 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_node	*new_node(t_node_kind kind)
 	return (node);
 }
 
-static t_node	*simple_command(t_token **rest, t_token *tok)
+static t_node	*new_command_node(t_token **rest, t_token *tok)
 {
 	t_node	*node;
 
@@ -51,7 +51,7 @@ t_node	*parse(t_token **rest, t_token *tok)
 	node->inpipe[1] = -1;
 	node->outpipe[0] = -1;
 	node->outpipe[1] = STDOUT_FILENO;
-	node->command = simple_command(&tok, tok);
+	node->command = new_command_node(&tok, tok);
 	if (equal_op(tok, "|"))
 		node->next = parse(&tok, tok->next);
 	*rest = tok;

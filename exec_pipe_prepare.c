@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe.c                                             :+:      :+:    :+:   */
+/*   exec_pipe_prepare.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:11:55 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:03:26 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 13:58:26 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	prepare_pipe_child(t_node *node)
 		close(node->outpipe[1]);
 }
 
-void	prepare_pipe_parent(t_node *node)
+void	close_pipe(t_node *node)
 {
 	if (node->inpipe[0] != STDIN_FILENO)
 		close(node->inpipe[0]);

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 11:08:32 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 13:55:55 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ static void	exec_child(t_node *node)
 	char		*path;
 	char		**argv;
 
-	reset_signal();
-	prepare_pipe_child(node);
 	do_redirect(node->command->redirects);
 	argv = token_list_to_argv(node->command->args);
 	path = argv[0];
@@ -50,8 +48,12 @@ static pid_t	exec_pipeline(t_node *node)
 	if (pid < 0)
 		fatal_error("fork");
 	else if (pid == 0)
+	{
+		reset_signal();
+		prepare_pipe_child(node);
 		exec_child(node);
-	prepare_pipe_parent(node);
+	}
+	close_pipe(node);
 	if (node->next)
 		return (exec_pipeline(node->next));
 	return (pid);

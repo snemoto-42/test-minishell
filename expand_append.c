@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 15:53:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 15:55:21 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 13:07:41 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ void	append_char(char **s, char c)
 		strlcpy(new, *s, size);
 	new[size - 2] = c;
 	new[size - 1] = '\0';
-	if (*s)
-		free(*s);
+	free(*s);
 	*s = new;
 }
 
