@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/04 20:47:00 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/07 14:46:05 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -191,3 +191,31 @@ print_desc "SIGINT to child process"
 assert './infinite_loop'
 
 cleanup
+
+# Manual Debug
+# $ ./minishell
+# $ 
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D
+#
+# $ ./minishell
+# $ hogehoge
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D
+#
+# $ ./minishell
+# $ cat <<EOF
+# >
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D
+#
+# $ ./minishell
+# $ cat <<EOF
+# > hoge
+# > fuga
+# 1. Ctrl-\ 
+# 2. Ctrl-C
+# 3. Ctrl-D

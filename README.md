@@ -50,17 +50,20 @@ void	free_node(t_node *node);
 ```
 void	fatal_error(const char *msg) __attribute__((noreturn));
 ```
-- TEXTTEXT
+- __atribute__((noreturn)) を関数につけると、「この関数はreturnしない（≒この関数が呼ばれたときはプログラムが終了する）」ということをコンパイラに知らせることができる
+- メモリ確保失敗などで利用
 
 ```
 void	assert_error(const char *msg) __attribute__((noreturn));
 ```
-- TEXTTEXT
+- __atribute__((noreturn)) を関数につけると、「この関数はreturnしない（≒この関数が呼ばれたときはプログラムが終了する）」ということをコンパイラに知らせることができる
+- シェルコマンドの不足などで利用
 
 ```
 void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
 ```
-- TEXTTEXT
+- __atribute__((noreturn)) を関数につけると、「この関数はreturnしない（≒この関数が呼ばれたときはプログラムが終了する）」ということをコンパイラに知らせることができる
+- シェルコマンドの不足などで利用（'location' command not found）
 
 ```
 void	xperror(const char *location);
@@ -76,12 +79,12 @@ void	tokenize_error(const char *location, char **rest, char *line);
 ```
 static char	*expand_heredoc_line(char *line);
 ```
-- TEXTTEXT
+- 条件分岐によりheredoc中の変数、スペシャル変数（$?）を展開
 
 ```
 int		read_heredoc(const char *delim, bool is_delim_unquoted);
 ```
-- TEXTTEXT
+- '<<'の後にreadlineを呼び出して読み込んでいく
 
 ## exec_pipe_prepare.c
 ```
@@ -181,23 +184,23 @@ int		open_redir_file(t_node *redir);
 ```
 static char	*check_path(const char *path);
 ```
-- TEXTTEXT
+- accessできればpathの文字列を生成して返す
 
 ```
 char	*search_path(const char *filename);
 ```
-- TEXTTEXT
+- 環境変数PATHを取得して、引数filenameと組み合わせてaccessできるものを返す
 
 ## exec_token_to_argv.c
 ```
 static char	**next_token(t_token *tok, int nargs, char **argv);
 ```
-- TEXTTEXT
+- 再帰的にtok->wordをargvに追記
 
 ```
 char	**token_list_to_argv(t_token *tok);
 ```
-- TEXTTEXT
+- tokからargvを生成する
 
 ## expand_append.c
 ```
@@ -369,38 +372,54 @@ t_node	*parse(t_token **rest, t_token *tok);
 ```
 static void	handler(int signum)
 ```
-- TEXTTEXT
+- sigactionで呼び出されたら、グローバル変数にsignumを代入
 
 ```
 void	reset_sig(int signum);
 ```
-- TEXTTEXT
+- シグナルハンドラをデフォルトの状態に戻すために使用
+- 引数 signum は、リセットするシグナルの番号を指定
+- 関数では、シグナルハンドラを SIG_DFL に設定しています。このフラグは、デフォルトのシグナル動作を指定
+- sigaction 関数を使用して、シグナルの設定を変更
+- sigemptyset 関数を使用して、シグナルハンドラによってマスクされたシグナルを解除し、sa_flags を 0 に設定して、既存のフラグを上書き
 
 ```
 void	ignore_sig(int signum);
 ```
-- TEXTTEXT
+- 指定されたシグナル番号である signum のシグナルを無視するように設定するために使用
+- シグナルの無視は、プログラムがそのシグナルを受け取っても、何も反応しないようにする
+- 関数の中では、sigaction() 関数を呼び出して、シグナル signum に対するハンドラを設定
+- sa_handler メンバーは SIG_IGN に設定されており、これはシグナルを無視する
 
 ```
 void	setup_sigint(void);
 ```
-- TEXTTEXT
+- SIGINT (シグナル番号2) が発生したときに呼び出される関数 handler を登録するためのもの
+- SIGINTは、Ctrl + Cキーが押されたときに送信されるシグナルで、通常はプログラムを中断するために使用
+- 関数 sigaction() は、指定されたシグナルの振る舞いを設定します。この関数で、SIGINTに対して handler 関数を登録
+- sa_mask フィールドは、シグナルハンドラの実行中にマスクされるシグナルのセットを指定します。ここでは、空のセットを指定しています
+- sa_flags フィールドには、シグナルのオプションフラグを指定することができますが、ここでは0に設定
 
 ```
 int		check_state(void);
 ```
-- TEXTTEXT
+- interruptedされたかどうかをモニタリング
 
 ## signal.c
 ```
 void	setup_signal(void);
 ```
-- TEXTTEXT
+- readline ライブラリを使用してシェルのインタラクティブなモードをセットアップする
+- _rl_echo_control_chars 変数を 0 に設定することで、入力されたコマンドのエコーバックを制御
+- isatty(STDIN_FILENO) が真であれば rl_event_hook を check_state に設定して、readline ライブラリによる入力を受け付けるようにする
+- isatty(STDIN_FILENO) は、標準入力がターミナルであるかどうか(プログラムが現在実行されているデバイスが、ユーザーが直接入出力を行うための端末であるかどうか)を判定
+- SIGQUIT シグナルを無視する ignore_sig 関数と、SIGINT シグナルに対する setup_sigint 関数も呼び出す
 
 ```
 void	reset_signal(void);
 ```
-- TEXTTEXT
+- シグナルハンドラが設定された後に、一時的にシグナルを無視するなどの処理が完了した後に、再びシグナルのデフォルト動作を復元するために使用
+- SIGQUITとSIGINTのシグナルハンドラをシグナルのデフォルト値にリセット
 
 ## tokenize_is.c
 ```

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 16:55:39 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 17:40:58 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 14:35:23 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,13 @@ void	setup_sigint(void)
 int	check_state(void)
 {
 	if (g_var.g_sig == 0)
-		return (0);
+		;
 	else if (g_var.g_sig == SIGINT)
 	{
 		g_var.g_sig = 0;
 		g_var.g_rl_interrupted = true;
 		rl_replace_line("", 0);
 		rl_done = 1;
-		return (0);
 	}
 	return (0);
 }
