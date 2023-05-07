@@ -6,15 +6,17 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 19:30:43 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 14:49:46 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 11:47:37 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_eof(t_token *tok)
+bool	equal_op(t_token *tok, char *op)
 {
-	return (tok->kind == TK_EOF);
+	if (tok->kind != TK_OP)
+		return (false);
+	return (strcmp(tok->word, op) == 0);
 }
 
 t_node	*new_node(t_node_kind kind)
@@ -40,7 +42,7 @@ static t_node	*simple_command(t_token **rest, t_token *tok)
 	return (node);
 }
 
-static t_node	*pipeline(t_token **rest, t_token *tok)
+t_node	*parse(t_token **rest, t_token *tok)
 {
 	t_node	*node;
 
@@ -51,12 +53,7 @@ static t_node	*pipeline(t_token **rest, t_token *tok)
 	node->outpipe[1] = STDOUT_FILENO;
 	node->command = simple_command(&tok, tok);
 	if (equal_op(tok, "|"))
-		node->next = pipeline(&tok, tok->next);
+		node->next = parse(&tok, tok->next);
 	*rest = tok;
 	return (node);
-}
-
-t_node	*parse(t_token *tok)
-{
-	return (pipeline(&tok, tok));
 }

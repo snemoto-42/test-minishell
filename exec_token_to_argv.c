@@ -6,13 +6,13 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 10:30:49 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 12:21:13 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**tail_recursive(t_token *tok, int nargs, char **argv)
+static char	**next_token(t_token *tok, int nargs, char **argv)
 {
 	if (tok == NULL || tok->kind == TK_EOF)
 		return (argv);
@@ -23,7 +23,7 @@ static char	**tail_recursive(t_token *tok, int nargs, char **argv)
 	if (argv[nargs] == NULL)
 		fatal_error("strdup");
 	argv[nargs + 1] = NULL;
-	return (tail_recursive(tok->next, nargs + 1, argv));
+	return (next_token(tok->next, nargs + 1, argv));
 }
 
 char	**token_list_to_argv(t_token *tok)
@@ -33,5 +33,5 @@ char	**token_list_to_argv(t_token *tok)
 	argv = calloc(1, sizeof(char *));
 	if (argv == NULL)
 		fatal_error("calloc");
-	return (tail_recursive(tok, 0, argv));
+	return (next_token(tok, 0, argv));
 }

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 11:06:19 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 12:17:13 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,19 @@ void	xperror(const char *location);
 void	tokenize_error(const char *location, char **rest, char *line);
 
 // exec
-int		expand_and_exec(t_node *node);
+int		read_heredoc(const char *delim, bool is_delim_unquoted);
 
 void	prepare_pipe(t_node *node);
 void	prepare_pipe_child(t_node *node);
 void	prepare_pipe_parent(t_node *node);
+
+int		expand_and_exec(t_node *node);
+
+void	do_redirect(t_node *redir);
+void	reset_redirect(t_node *redir);
+
+int		stashfd(int fd);
+int		open_redir_file(t_node *redir);
 
 char	*search_path(const char *filename);
 
@@ -129,30 +137,19 @@ void	expand_quote_removal(t_node *node);
 void	expend_special_parameter_str(char **dst, char **rest, char *p);
 void	expand_variable_str(char **dst, char **rest, char *p);
 void	expand_variable(t_node *node);
-char	*expand_heredoc_line(char *line);
 
 // parse
 t_token	*tokdup(t_token *tok);
 void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 
-bool	is_eof(t_token *tok);
-t_node	*new_node(t_node_kind kind);
-t_node	*parse(t_token *tok);
-
-// redirect
 t_node	*redirect_out(t_token **rest, t_token *tok);
 t_node	*redirect_in(t_token **rest, t_token *tok);
 t_node	*redirect_append(t_token **rest, t_token *tok);
 t_node	*redirect_heredoc(t_token **rest, t_token *tok);
 
 bool	equal_op(t_token *tok, char *op);
-bool	is_redirect(t_node *node);
-int		stashfd(int fd);
-int		read_heredoc(const char *delim, bool is_delim_unquoted);
-
-int		open_redir_file(t_node *redir);
-void	do_redirect(t_node *redir);
-void	reset_redirect(t_node *redir);
+t_node	*new_node(t_node_kind kind);
+t_node	*parse(t_token **rest, t_token *tok);
 
 // signal
 void	reset_sig(int signum);
@@ -168,11 +165,12 @@ bool	is_blank(char c);
 bool	is_metacharacter(char c);
 bool	is_word(const char *s);
 bool	is_control_operator(t_token *tok);
-bool	startswith(const char *s, const char *keyword);
+bool	is_eof(t_token *tok);
 
 t_token	*word(char **rest, char *line);
 
 t_token	*new_token(char *word, t_token_kind kind);
+bool	check_op(const char *s, const char *keyword);
 t_token	*tokenize(char *line);
 
 #endif

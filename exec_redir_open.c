@@ -1,16 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect.c                                         :+:      :+:    :+:   */
+/*   exec_redir_open.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 10:53:43 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 12:15:03 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	stashfd(int fd)
+{
+	int	stashfd;
+
+	stashfd = fcntl(fd, F_DUPFD, 10);
+	if (stashfd < 0)
+		fatal_error("fcntl");
+	if (close(fd) < 0)
+		fatal_error("close");
+	return (stashfd);
+}
 
 static int	check_redir_file(t_node *node)
 {
@@ -56,33 +68,4 @@ int	open_redir_file(t_node *node)
 	}
 	node->filefd = stashfd(node->filefd);
 	return (open_redir_file(node->next));
-}
-
-void	do_redirect(t_node *redir)
-{
-	if (redir == NULL)
-		return ;
-	if (is_redirect(redir))
-	{
-		redir->stashed_targetfd = stashfd(redir->targetfd);
-		dup2(redir->filefd, redir->targetfd);
-	}
-	else
-		assert_error("do_redirect");
-	do_redirect(redir->next);
-}
-
-void	reset_redirect(t_node *redir)
-{
-	if (redir == NULL)
-		return ;
-	reset_redirect(redir->next);
-	if (is_redirect(redir))
-	{
-		close(redir->filefd);
-		close(redir->targetfd);
-		dup2(redir->stashed_targetfd, redir->targetfd);
-	}
-	else
-		assert_error("reset_redirect");
 }

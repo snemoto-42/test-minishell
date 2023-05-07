@@ -74,6 +74,17 @@ void	tokenize_error(const char *location, char **rest, char *line);
 ```
 - tokenize系で使用
 
+## exec_heredoc.c
+```
+static char	*expand_heredoc_line(char *line);
+```
+- TEXTTEXT
+
+```
+int		read_heredoc(const char *delim, bool is_delim_unquoted);
+```
+- TEXTTEXT
+
 ## exec_pipe_prepare.c
 ```
 static void	cpy_pipe(int dst[2], int src[2]);
@@ -122,6 +133,38 @@ int	expand_and_exec(t_node *node);
 - 変数variable展開->quote削除の順にnodeを変更していく。
 - nodeの種類kindに応じたリダイレクト処理、コマンドの実行を行う。
 
+## exec_redirect_do_reset.c
+```
+bool	is_redirect(t_node *node);
+```
+- TEXTTEXT
+
+```
+void	do_redirect(t_node *redir);
+```
+- TEXTTEXT
+
+```
+void	reset_redirect(t_node *redir);
+```
+- TEXTTEXT
+
+## exec_redirect_open.c
+```
+int		stashfd(int fd);
+```
+- TEXTTEXT
+
+```
+static int	check_redir_file(t_node *node);
+```
+- TEXTTEXT
+
+```
+int		open_redir_file(t_node *redir);
+```
+- TEXTTEXT
+
 ## exec_search_path.c
 ```
 static char	*check_path(const char *path);
@@ -135,7 +178,7 @@ char	*search_path(const char *filename);
 
 ## exec_token_to_argv.c
 ```
-static char	**tail_recursive(t_token *tok, int nargs, char **argv);
+static char	**next_token(t_token *tok, int nargs, char **argv);
 ```
 - TEXTTEXT
 
@@ -146,12 +189,12 @@ char	**token_list_to_argv(t_token *tok);
 
 ## expand_append.c
 ```
-void	append_char(char **s, char c);
+void	append_num(char **dst, unsigned int num);
 ```
 - TEXTTEXT
 
 ```
-void	append_num(char **dst, unsigned int num);
+void	append_char(char **s, char c);
 ```
 - TEXTTEXT
 
@@ -228,19 +271,14 @@ void	expand_variable(t_node *node);
 ```
 - TEXTTEXT
 
-```
-char	*expand_heredoc_line(char *line);
-```
-- TEXTTEXT
-
 ## main.c
 ```
 static void	init_g_var(t_global g_var);
 ```
-- TEXTTEXT
+-  グローバル変数の構造体を初期化
 
 ```
-static void	interpret(char *line, int *stat_loc);
+static void	handle_line(char *line, int *stat_loc);
 ```
 - tokenize->parse->expand->execの順にプロンプトに入力されたlineを実行していく。
 
@@ -250,6 +288,11 @@ int	main(void);
 - テストでdiffをとるため、readlineの出力先をstderrに変更。
 
 ## parse_append.c
+```
+t_token	*tokdup(t_token *tok);
+```
+- TEXTTEXT
+
 ```
 static void	append_tok(t_token **tok, t_token *elm);
 ```
@@ -261,42 +304,11 @@ static void	append_node(t_node **node, t_node *elm);
 - TEXTTEXT
 
 ```
-t_token	*tokdup(t_token *tok);
-```
-- TEXTTEXT
-
-```
 void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 ```
 - TEXTTEXT
 
-## parse.c
-```
-bool	is_eof(t_token *tok);
-```
-- TEXTTEXT
-
-```
-t_node	*new_node(t_node_kind kind);
-```
-- TEXTTEXT
-
-```
-static t_node	*simple_command(t_token **rest, t_token *tok);
-```
-- TEXTTEXT
-
-```
-static t_node	*pipeline(t_token **rest, t_token *tok);
-```
-- TEXTTEXT
-
-```
-t_node	*parse(t_token *tok);
-```
-- TEXTTEXT
-
-## redirect_op.c
+## parse_redirect_op.c
 ```
 - t_node	*redirect_out(t_token **rest, t_token *tok);
 ```
@@ -317,45 +329,24 @@ t_node	*redirect_heredoc(t_token **rest, t_token *tok);
 ```
 - TEXTTEXT
 
-## redirect_util.c
+## parse.c
 ```
 bool	equal_op(t_token *tok, char *op);
 ```
-- TEXTTEXT
+- opが合っているか判定する
 
 ```
-bool	is_redirect(t_node *node);
+t_node	*new_node(t_node_kind kind);
 ```
-- TEXTTEXT
+-  新しいnodeを生成
 
 ```
-int		stashfd(int fd);
-```
-- TEXTTEXT
-
-```
-int		read_heredoc(const char *delim, bool is_delim_unquoted);
-```
-- TEXTTEXT
-
-## redirect.c
-```
-static int	check_redir_file(t_node *node);
+static t_node	*simple_command(t_token **rest, t_token *tok);
 ```
 - TEXTTEXT
 
 ```
-int		open_redir_file(t_node *redir);
-```
-- TEXTTEXT
-
-```
-void	do_redirect(t_node *redir);
-```
-- TEXTTEXT
-
-```
-void	reset_redirect(t_node *redir);
+t_node	*parse(t_token **rest, t_token *tok);
 ```
 - TEXTTEXT
 
@@ -400,61 +391,67 @@ void	reset_signal(void);
 ```
 bool	is_blank(char c);
 ```
-- TEXTTEXT
+- bashが定義するspaceかどうか判定
 
 ```
 bool	is_metacharacter(char c);
 ```
-- TEXTTEXT
+- bashが定義するmetacharacterかnewlineかどうか判定
 
 ```
 bool	is_word(const char *s);
 ```
-- TEXTTEXT
+- bashが定義するwordかどうか判定
 
 ```
 bool	is_control_operator(t_token *tok);
 ```
-- TEXTTEXT
+- どのoperatorか判定
 
 ```
-bool	startswith(const char *s, const char *keyword);
+bool	is_eof(t_token *tok);
 ```
-- TEXTTEXT
+- 最後のtokか判定
 
 ## tokenize_word.c
 ```
 static bool	word_single_quote(char **rest, char *line);
 ```
-- TEXTTEXT
+- wordがシングルクオートで囲まれている区間を読み飛ばす
 
 ```
 static bool	word_double_quote(char **rest, char *line);
 ```
-- TEXTTEXT
+- wordがダブルクオートで囲まれている区間を読み飛ばす
 
 ```
 t_token	*word(char **rest, char *line);
 ```
-- TEXTTEXT
+- bashが定義するwordに該当するものをtokとして返す
 
 ## tokenize.c
 ```
-static bool	consume_blank(char **rest, char *line);
-```
-- TEXTTEXT
-
-```
 t_token	*new_token(char *word, t_token_kind kind);
 ```
-- TEXTTEXT
+- 新しいtokの生成
+
+```
+bool	check_op(const char *s, const char *keyword);
+```
+- operatorかどうか判定
 
 ```
 static t_token	*operator(char **rest, char *line);
 ```
-- TEXTTEXT
+- bashが定義するcontrol operatorかredirectionに該当するものをtokとして返す
+
+```
+static bool	skip_blank(char **rest, char *line);
+```
+- lineのスペース、タブ、改行を読み飛ばす
 
 ```
 t_token	*tokenize(char *line);
 ```
-- TEXTTEXT
+- lineをlistとして返す。listはtok構造体が連なっている
+- tok構造体はmetacharacterかwordに分かれる

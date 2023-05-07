@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 17:41:15 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 11:44:12 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	init_g_var(t_global g_var)
 	g_var.g_last_status = 0;
 }
 
-static void	interpret(char *line, int *stat_loc)
+static void	handle_line(char *line, int *stat_loc)
 {
 	t_token	*tok;
 	t_node	*node;
@@ -34,7 +34,7 @@ static void	interpret(char *line, int *stat_loc)
 		*stat_loc = ERROR_TOKENIZE;
 	else
 	{
-		node = parse(tok);
+		node = parse(&tok, tok);
 		if (g_var.g_syntax_error)
 			*stat_loc = ERROR_PARSE;
 		else
@@ -58,7 +58,7 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		interpret(line, &g_var.g_last_status);
+		handle_line(line, &g_var.g_last_status);
 		free(line);
 	}
 	exit(g_var.g_last_status);

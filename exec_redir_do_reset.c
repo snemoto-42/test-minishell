@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect_util.c                                    :+:      :+:    :+:   */
+/*   exec_redir_do_reset.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 12:26:26 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 17:45:26 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 12:15:14 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	equal_op(t_token *tok, char *op)
-{
-	if (tok->kind != TK_OP)
-		return (false);
-	return (strcmp(tok->word, op) == 0);
-}
-
-bool	is_redirect(t_node *node)
+static bool	is_redirect(t_node *node)
 {
 	if (node->kind == ND_REDIR_OUT)
 		return (true);
@@ -33,41 +26,31 @@ bool	is_redirect(t_node *node)
 		return (false);
 }
 
-int	stashfd(int fd)
+void	do_redirect(t_node *redir)
 {
-	int	stashfd;
-
-	stashfd = fcntl(fd, F_DUPFD, 10);
-	if (stashfd < 0)
-		fatal_error("fcntl");
-	if (close(fd) < 0)
-		fatal_error("close");
-	return (stashfd);
+	if (redir == NULL)
+		return ;
+	if (is_redirect(redir))
+	{
+		redir->stashed_targetfd = stashfd(redir->targetfd);
+		dup2(redir->filefd, redir->targetfd);
+	}
+	else
+		assert_error("do_redirect");
+	do_redirect(redir->next);
 }
 
-int	read_heredoc(const char *delim, bool is_delim_unquoted)
+void	reset_redirect(t_node *redir)
 {
-	char	*line;
-	int		pfd[2];
-
-	if (pipe(pfd) < 0)
-		fatal_error("pipe");
-	while (1)
+	if (redir == NULL)
+		return ;
+	reset_redirect(redir->next);
+	if (is_redirect(redir))
 	{
-		line = readline("> ");
-		if (line == NULL || g_var.g_rl_interrupted || strcmp(line, delim) == 0)
-			break ;
-		if (is_delim_unquoted)
-			line = expand_heredoc_line(line);
-		dprintf(pfd[1], "%s\n", line);
-		free(line);
+		close(redir->filefd);
+		close(redir->targetfd);
+		dup2(redir->stashed_targetfd, redir->targetfd);
 	}
-	free(line);
-	close(pfd[1]);
-	if (g_var.g_rl_interrupted)
-	{
-		close(pfd[0]);
-		return (-1);
-	}
-	return (pfd[0]);
+	else
+		assert_error("reset_redirect");
 }

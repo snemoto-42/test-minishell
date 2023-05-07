@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 17:17:37 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 11:36:06 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ t_token	*new_token(char *word, t_token_kind kind)
 	return (tok);
 }
 
+bool	check_op(const char *s, const char *keyword)
+{
+	return (memcmp(s, keyword, strlen(keyword)) == 0);
+}
+
 static t_token	*operator(char **rest, char *line)
 {
 	static char *const	operators[] = {">>", "<<", "||", "&&", ";;",
@@ -34,7 +39,7 @@ static t_token	*operator(char **rest, char *line)
 	i = 0;
 	while (i < sizeof(operators) / sizeof(*operators))
 	{
-		if (startswith(line, operators[i]))
+		if (check_op(line, operators[i]))
 		{
 			op = strdup(operators[i]);
 			if (op == NULL)
@@ -48,7 +53,7 @@ static t_token	*operator(char **rest, char *line)
 	return (NULL);
 }
 
-static bool	consume_blank(char **rest, char *line)
+static bool	skip_blank(char **rest, char *line)
 {
 	if (is_blank(*line))
 	{
@@ -70,7 +75,7 @@ t_token	*tokenize(char *line)
 	tok = &head;
 	while (*line)
 	{
-		if (consume_blank(&line, line))
+		if (skip_blank(&line, line))
 			continue ;
 		else if (is_metacharacter(*line))
 		{
