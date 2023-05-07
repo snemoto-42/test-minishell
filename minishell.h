@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 17:41:30 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 11:06:19 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ int		expand_and_exec(t_node *node);
 void	prepare_pipe(t_node *node);
 void	prepare_pipe_child(t_node *node);
 void	prepare_pipe_parent(t_node *node);
+
+char	*search_path(const char *filename);
 
 char	**token_list_to_argv(t_token *tok);
 

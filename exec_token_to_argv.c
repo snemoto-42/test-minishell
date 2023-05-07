@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenize_to_argv.c                                 :+:      :+:    :+:   */
+/*   exec_token_to_argv.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 12:42:59 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/04 20:03:54 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 10:30:49 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static char	**tail_recursive(t_token *tok, int nargs, char **argv)
 	if (tok == NULL || tok->kind == TK_EOF)
 		return (argv);
 	argv = reallocf(argv, sizeof(char *) * (nargs + 2));
+	if (argv == NULL)
+		fatal_error("reallocf");
 	argv[nargs] = strdup(tok->word);
 	if (argv[nargs] == NULL)
 		fatal_error("strdup");

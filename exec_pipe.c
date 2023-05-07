@@ -6,43 +6,11 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/05 17:27:19 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/07 11:08:32 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	*search_path(const char *filename)
-{
-	char	path[PATH_MAX];
-	char	*value;
-	char	*end;
-	char	*dup;
-
-	value = getenv("PATH");
-	while (*value)
-	{
-		bzero(path, PATH_MAX);
-		end = strchr(value, ':');
-		if (end)
-			strncpy(path, value, end - value);
-		else
-			strlcpy(path, value, PATH_MAX);
-		strlcat(path, "/", PATH_MAX);
-		strlcat(path, filename, PATH_MAX);
-		if (access(path, X_OK) == 0)
-		{	
-			dup = strdup(path);
-			if (dup == NULL)
-				fatal_error("strdup");
-			return (dup);
-		}
-		if (end == NULL)
-			return (NULL);
-		value = end + 1;
-	}
-	return (NULL);
-}
 
 static void	validate_access(const char *path, const char *filename)
 {
@@ -52,12 +20,28 @@ static void	validate_access(const char *path, const char *filename)
 		err_exit(filename, "command not found", 127);
 }
 
-static pid_t	exec_pipeline(t_node *node)
+static void	exec_child(t_node *node)
 {
 	extern char	**environ;
-	pid_t		pid;
 	char		*path;
 	char		**argv;
+
+	reset_signal();
+	prepare_pipe_child(node);
+	do_redirect(node->command->redirects);
+	argv = token_list_to_argv(node->command->args);
+	path = argv[0];
+	if (strchr(path, '/') == NULL)
+		path = search_path(path);
+	validate_access(path, argv[0]);
+	execve(path, argv, environ);
+	reset_redirect(node->command->redirects);
+	fatal_error("execve");
+}
+
+static pid_t	exec_pipeline(t_node *node)
+{
+	pid_t		pid;
 
 	if (node == NULL)
 		return (-1);
@@ -66,19 +50,7 @@ static pid_t	exec_pipeline(t_node *node)
 	if (pid < 0)
 		fatal_error("fork");
 	else if (pid == 0)
-	{
-		reset_signal();
-		prepare_pipe_child(node);
-		do_redirect(node->command->redirects);
-		argv = token_list_to_argv(node->command->args);
-		path = argv[0];
-		if (strchr(path, '/') == NULL)
-			path = search_path(path);
-		validate_access(path, argv[0]);
-		execve(path, argv, environ);
-		reset_redirect(node->command->redirects);
-		fatal_error("execve");
-	}
+		exec_child(node);
 	prepare_pipe_parent(node);
 	if (node->next)
 		return (exec_pipeline(node->next));

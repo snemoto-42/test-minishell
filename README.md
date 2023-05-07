@@ -3,409 +3,458 @@ The following is the file structure and function descriptions for minishell.
 
 UPDATED 2023/05/05
 
+## メモリ確保
+- static char	*search_path(const char *filename);
+- char			**token_list_to_argv(t_token *tok);
+- static char	**tail_recursive(t_token *tok, int nargs, char **argv);
+- void			append_char(char **s, char c);
+- static void	remove_quote(t_token *tok);
+- void			expand_variable_str(char **dst, char **rest, char *p);
+- static void	expand_variable_tok(t_token *tok);
+- char			*expand_heredoc_line(char *line);
+- int			main(void);
+- t_token		*tokdup(t_token *tok);
+- void			append_command_element(t_node *command, t_token **rest, t_token *tok);
+- t_node		*new_node(t_node_kind kind);
+- static t_node	*simple_command(t_token **rest, t_token *tok);
+- static t_node	*pipeline(t_token **rest, t_token *tok);
+- t_node		*redirect_out(t_token **rest, t_token *tok);
+- t_node		*redirect_in(t_token **rest, t_token *tok);
+- t_node		*redirect_append(t_token **rest, t_token *tok);
+- t_node		*redirect_heredoc(t_token **rest, t_token *tok);
+- int			read_heredoc(const char *delim, bool is_delim_unquoted);
+- t_token		*word(char **rest, char *line);
+- t_token		*new_token(char *word, t_token_kind kind);
+
+## メモリ解放
+- void			free_tok(t_token *tok);
+- void			free_node(t_node *node);
+- static void	remove_quote(t_token *tok);
+- void			expand_variable_str(char **dst, char **rest, char *p);
+- static void	expand_variable_tok(t_token *tok);
+- char			*expand_heredoc_line(char *line);
+- static void	interpret(char *line, int *stat_loc);
+- int			main(void);
+- int			read_heredoc(const char *delim, bool is_delim_unquoted);
+
 ## destructor.c
 ```
 void	free_tok(t_token *tok);
 ```
-・再帰的にnode->wordとnodeをfreeしていく
+- 再帰的にnode->wordとnodeをfreeしていく
 
 ```
 void	free_node(t_node *node);
 ```
-・再帰的にtokとnodeをfreeしていく
+- 再帰的にtokとnodeをfreeしていく
 
 ## error.c
 ```
 void	fatal_error(const char *msg) __attribute__((noreturn));
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	assert_error(const char *msg) __attribute__((noreturn));
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	err_exit(const char *location, const char *msg, int status) __attribute__((noreturn));
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	xperror(const char *location);
 ```
-・perrorの呼び出し、redirect.cでのみ使用
+- perrorの呼び出し、redirect.cでのみ使用
 
 ```
 void	tokenize_error(const char *location, char **rest, char *line);
 ```
-・tokenize系で使用
+- tokenize系で使用
 
 ## exec_pipe_prepare.c
 ```
 static void	cpy_pipe(int dst[2], int src[2]);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	prepare_pipe(t_node *node);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	prepare_pipe_child(t_node *node);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	prepare_pipe_parent(t_node *node);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## exec_pipe.c
 ```
-static char	*search_path(const char *filename);
-```
-TEXTTEXT
-
-```
 static void	validate_access(const char *path, const char *filename);
 ```
-TEXTTEXT
+- TEXTTEXT
+
+```
+static void		exec_child(t_node *node);
+```
+- TEXTTEXT
 
 ```
 static pid_t	exec_pipeline(t_node *node);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static int		wait_pipeline(pid_t last_pid);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 int	expand_and_exec(t_node *node);
 ```
-・変数variable展開->quote削除の順にnodeを変更していく。
+- 変数variable展開->quote削除の順にnodeを変更していく。
+- nodeの種類kindに応じたリダイレクト処理、コマンドの実行を行う。
 
-・nodeの種類kindに応じたリダイレクト処理、コマンドの実行を行う。
+## exec_search_path.c
+```
+static char	*check_path(const char *path);
+```
+- TEXTTEXT
+
+```
+char	*search_path(const char *filename);
+```
+- TEXTTEXT
 
 ## exec_token_to_argv.c
 ```
 static char	**tail_recursive(t_token *tok, int nargs, char **argv);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 char	**token_list_to_argv(t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## expand_append.c
 ```
 void	append_char(char **s, char c);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	append_num(char **dst, unsigned int num);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	append_single_quote(char **dst, char **rest, char *p);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	append_double_quote(char **dst, char **rest, char *p);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## expand_is.c
 ```
 bool	is_alpha_under(char c);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	is_alpha_num_under(char c);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	is_variable(char *s);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	is_special_parameter(char *s);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## expand_remove.c
 ```
 static void	remove_single_quote(char **dst, char **rest, char *p);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static void	remove_double_quote(char **dst, char **rest, char *p);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static void	remove_quote(t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	expand_quote_removal(t_node *node);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## expand_var.c
 ```
 void	expend_special_parameter_str(char **dst, char **rest, char *p);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	expand_variable_str(char **dst, char **rest, char *p);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static void	expand_variable_tok(t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	expand_variable(t_node *node);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 char	*expand_heredoc_line(char *line);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## main.c
 ```
 static void	init_g_var(t_global g_var);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static void	interpret(char *line, int *stat_loc);
 ```
-・tokenize->parse->expand->execの順にプロンプトに入力されたlineを実行していく。
+- tokenize->parse->expand->execの順にプロンプトに入力されたlineを実行していく。
 
 ```
 int	main(void);
 ```
-・テストでdiffをとるため、readlineの出力先をstderrに変更。
+- テストでdiffをとるため、readlineの出力先をstderrに変更。
 
 ## parse_append.c
 ```
 static void	append_tok(t_token **tok, t_token *elm);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static void	append_node(t_node **node, t_node *elm);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_token	*tokdup(t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	append_command_element(t_node *command, t_token **rest, t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## parse.c
 ```
 bool	is_eof(t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_node	*new_node(t_node_kind kind);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static t_node	*simple_command(t_token **rest, t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static t_node	*pipeline(t_token **rest, t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_node	*parse(t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## redirect_op.c
 ```
-t_node	*redirect_out(t_token **rest, t_token *tok);
+- t_node	*redirect_out(t_token **rest, t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_node	*redirect_in(t_token **rest, t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_node	*redirect_append(t_token **rest, t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_node	*redirect_heredoc(t_token **rest, t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## redirect_util.c
 ```
 bool	equal_op(t_token *tok, char *op);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	is_redirect(t_node *node);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 int		stashfd(int fd);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 int		read_heredoc(const char *delim, bool is_delim_unquoted);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## redirect.c
 ```
+static int	check_redir_file(t_node *node);
+```
+- TEXTTEXT
+
+```
 int		open_redir_file(t_node *redir);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	do_redirect(t_node *redir);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	reset_redirect(t_node *redir);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## signal_util.c
 ```
 static void	handler(int signum)
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	reset_sig(int signum);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	ignore_sig(int signum);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	setup_sigint(void);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 int		check_state(void);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## signal.c
 ```
 void	setup_signal(void);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 void	reset_signal(void);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## tokenize_is.c
 ```
 bool	is_blank(char c);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	is_metacharacter(char c);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	is_word(const char *s);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	is_control_operator(t_token *tok);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 bool	startswith(const char *s, const char *keyword);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## tokenize_word.c
 ```
 static bool	word_single_quote(char **rest, char *line);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static bool	word_double_quote(char **rest, char *line);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_token	*word(char **rest, char *line);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ## tokenize.c
 ```
 static bool	consume_blank(char **rest, char *line);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_token	*new_token(char *word, t_token_kind kind);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 static t_token	*operator(char **rest, char *line);
 ```
-TEXTTEXT
+- TEXTTEXT
 
 ```
 t_token	*tokenize(char *line);
 ```
-TEXTTEXT
+- TEXTTEXT
