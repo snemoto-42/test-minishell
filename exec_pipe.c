@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/07 13:55:55 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/14 14:01:07 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,25 @@ static void	validate_access(const char *path, const char *filename)
 
 static void	exec_child(t_node *node)
 {
-	extern char	**environ;
 	char		*path;
 	char		**argv;
+	t_list		*head;
+	char		**array;
 
 	do_redirect(node->command->redirects);
 	argv = token_list_to_argv(node->command->args);
-	path = argv[0];
-	if (strchr(path, '/') == NULL)
-		path = search_path(path);
-	validate_access(path, argv[0]);
-	execve(path, argv, environ);
-	reset_redirect(node->command->redirects);
-	fatal_error("execve");
+	head = env_to_list(environ);
+	if (built_in_cmd(argv, head, node) == 0)
+	{
+		path = argv[0];
+		if (strchr(path, '/') == NULL)
+			path = search_path(path);
+		validate_access(path, argv[0]);
+		array = list_to_array(head);
+		execve(path, argv, array);
+		reset_redirect(node->command->redirects);
+		fatal_error("execve");
+	}
 }
 
 static pid_t	exec_pipeline(t_node *node)
