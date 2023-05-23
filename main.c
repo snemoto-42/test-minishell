@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:52 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/23 18:16:37 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/23 20:43:25 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	init_g_var(t_global g_var)
 	g_var.g_last_status = 0;
 }
 
-static void	handle_line(char *line, int *stat_loc)
+static void	handle_line(char *line, int *stat_loc, t_list *head)
 {
 	t_token	*tok;
 	t_node	*node;
@@ -38,7 +38,9 @@ static void	handle_line(char *line, int *stat_loc)
 		if (g_var.g_syntax_error)
 			*stat_loc = ERROR_PARSE;
 		else
-			*stat_loc = expand_and_exec(node);
+		{
+			*stat_loc = expand_and_exec(node, head);
+		}
 		free_node(node);
 	}
 	free_tok(tok);
@@ -47,10 +49,12 @@ static void	handle_line(char *line, int *stat_loc)
 int	main(void)
 {
 	char	*line;
+	t_list	*head;
 
 	rl_outstream = stderr;
 	setup_signal();
 	init_g_var(g_var);
+	head = env_to_list(environ);
 	while (1)
 	{
 		line = readline("minishell$ ");
@@ -58,7 +62,7 @@ int	main(void)
 			break ;
 		if (*line)
 			add_history(line);
-		handle_line(line, &g_var.g_last_status);
+		handle_line(line, &g_var.g_last_status, head);
 		free(line);
 	}
 	exit(g_var.g_last_status);

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:28:17 by hikaru            #+#    #+#             */
-/*   Updated: 2023/05/23 17:11:22 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/23 20:35:13 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ int	ft_unset(char **cmd, t_list *env_head)
 		}
 		i++;
 	}
-	exit(0);
 	return (TRUE);
 }

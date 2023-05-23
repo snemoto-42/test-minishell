@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 13:01:19 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/23 20:18:23 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/23 20:44:21 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,18 +91,16 @@ static pid_t	exec_pipeline(t_node *node, t_list *head, char **argv)
 	return (pid);
 }
 
-int	expand_and_exec(t_node *node)
+int	expand_and_exec(t_node *node, t_list *head)
 {
 	pid_t	last_pid;
 	int		status;
-	t_list	*head;
 	char	**argv;
 
 	expand_variable(node);
 	expand_quote_removal(node);
 	if (open_redir_file(node) < 0)
 		return (ERRPR_OPEN_REDIR);
-	head = env_to_list(environ);
 	argv = token_list_to_argv(node->command->args);
 	if (is_builtin(argv) != FALSE)
 	{

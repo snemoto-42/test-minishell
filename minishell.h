@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/23 20:04:44 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/23 20:42:00 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,16 @@ struct s_node
 	int						outpipe[2];
 };
 
+typedef struct s_list
+{
+	int				count;
+	char			*key;
+	char			*value;
+	struct s_list	*next;
+	struct s_list	*prev;
+	int				sort_flag;
+}	t_list;
+
 // destructor
 void	free_tok(t_token *tok);
 void	free_node(t_node *node);
@@ -113,7 +123,7 @@ void	prepare_pipe(t_node *node);
 void	prepare_pipe_child(t_node *node);
 void	close_pipe(t_node *node);
 
-int		expand_and_exec(t_node *node);
+int		expand_and_exec(t_node *node, t_list *head);
 
 void	do_redirect(t_node *redir);
 void	reset_redirect(t_node *redir);
@@ -176,16 +186,6 @@ t_token	*word(char **rest, char *line);
 t_token	*new_token(char *word, t_token_kind kind);
 bool	check_op(const char *s, const char *keyword);
 t_token	*tokenize(char *line);
-
-typedef struct s_list
-{
-	int				count;
-	char			*key;
-	char			*value;
-	struct s_list	*next;
-	struct s_list	*prev;
-	int				sort_flag;
-}	t_list;
 
 //built_in_cmd.c
 int		free_cmd(char **cmd);
