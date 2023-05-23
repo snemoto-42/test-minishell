@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmorisak <hmorisak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:26:04 by hikaru            #+#    #+#             */
-/*   Updated: 2023/05/08 15:38:44 by hmorisak         ###   ########.fr       */
+/*   Updated: 2023/05/23 19:16:11 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	ft_chdir(char **cmd, DIR *dir)
 
 int	ft_cd(char **cmd, char *cwd)
 {
-	DIR				*dir;
+	DIR	*dir;
 
 	if (!cmd[1])
 		chdir(ft_strjoin("/Users/", getlogin()));

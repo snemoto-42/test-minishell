@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hikaru <hikaru@student.42.fr>              +#+  +:+       +#+        */
+/*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 22:27:32 by hikaru            #+#    #+#             */
-/*   Updated: 2023/05/07 22:27:40 by hikaru           ###   ########.fr       */
+/*   Updated: 2023/05/23 19:58:58 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_exit(char **cmd)
 {
 	if (cmd[1] && cmd[2])
 	{
-		dprintf(2, "bash: exit: too many arguments\n");
+		dprintf(STDERR_FILENO, "bash: exit: too many arguments\n");
 		exit(255);
 	}
 	else if (cmd[1])

@@ -6,7 +6,7 @@
 /*   By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 11:49:47 by snemoto           #+#    #+#             */
-/*   Updated: 2023/05/14 14:05:30 by snemoto          ###   ########.fr       */
+/*   Updated: 2023/05/23 20:04:44 by snemoto          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,8 @@ typedef struct s_list
 
 //built_in_cmd.c
 int		free_cmd(char **cmd);
-int		built_in_cmd(char **cmd, t_list *env_head, t_node *node);
+int		is_builtin(char **cmd);
+int		built_in_cmd(char **cmd, t_list *env_head);
 
 //cd.c
 int		ft_cd(char **cmd, char *cwd);

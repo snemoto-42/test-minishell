@@ -6,7 +6,7 @@
 #    By: snemoto <snemoto@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 11:49:56 by snemoto           #+#    #+#              #
-#    Updated: 2023/05/14 13:46:14 by snemoto          ###   ########.fr        #
+#    Updated: 2023/05/23 20:22:04 by snemoto          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -228,20 +228,6 @@ assert	'exit hello'
 assert	'exit 42tokyo'
 assert	'exit 1 2'
 
-print_desc "Output of 'export' differs, but it's ok."
-assert	'export'
-assert	'export | grep nosuch | sort'
-assert	'export nosuch\n export | grep nosuch | sort'
-assert	'export nosuch=fuga\n export | grep nosuch | sort'
-assert	'export nosuch=fuga hoge=nosuch\n export | grep nosuch | sort'
-assert	'export [invalid]'
-assert	'export [invalid_nosuch]\n export | grep nosuch | sort'
-assert	'export [invalid]=nosuch\n export | grep nosuch | sort'
-assert	'export [invalid] nosuch hoge=nosuch\n export | grep nosuch | sort'
-assert	'export nosuch [invalid] hoge=nosuch\n export | grep nosuch | sort'
-assert	'export nosuch hoge=nosuch [invalid]\n export | grep nosuch | sort'
-assert	'export nosuch="nosuch2=hoge\n"export $nosuch export | grep nosuch | sort'
-
 export hoge fuga=fuga
 assert	'unset'
 assert	'unset hoge'
@@ -252,10 +238,6 @@ assert	'unset hoge fuga'
 assert	'unset hoge nosuch fuga'
 assert	'unset fuga \n export | echo '$fuga''
 assert	'unset [invalid] fuga \n echo $fuga'
-
-print_desc "Output of 'env' differs, but it's ok."
-assert	'env'
-assert	'env | grep hoge | sort'
 
 assert	'cd'
 assert	'cd .'
@@ -294,5 +276,23 @@ assert	'cd .. \n pwd \n echo $PWD $OLDPWD'
 assert	'cd /// \n pwd \n echo $PWD $OLDPWD'
 assert	'cd /tmp/// \n pwd \n echo $PWD $OLDPWD'
 assert	'unset PWD\npwd\ncd /etc/\npwd'
+
+print_desc "Output of 'export' differs, but it's ok."
+assert	'export'
+assert	'export | grep nosuch | sort'
+assert	'export nosuch\n export | grep nosuch | sort'
+assert	'export nosuch=fuga\n export | grep nosuch | sort'
+assert	'export nosuch=fuga hoge=nosuch\n export | grep nosuch | sort'
+assert	'export [invalid]'
+assert	'export [invalid_nosuch]\n export | grep nosuch | sort'
+assert	'export [invalid]=nosuch\n export | grep nosuch | sort'
+assert	'export [invalid] nosuch hoge=nosuch\n export | grep nosuch | sort'
+assert	'export nosuch [invalid] hoge=nosuch\n export | grep nosuch | sort'
+assert	'export nosuch hoge=nosuch [invalid]\n export | grep nosuch | sort'
+assert	'export nosuch="nosuch2=hoge\n"export $nosuch export | grep nosuch | sort'
+
+print_desc "Output of 'env' differs, but it's ok."
+assert	'env'
+assert	'env | grep hoge | sort'
 
 cleanup
